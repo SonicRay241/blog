@@ -22,7 +22,7 @@ const Page = () => {
   const [isError, setIsError] = useState(false)
 
   useEffect(()=>{
-    fetch(`https://api.blogs.rayy.dev/v1/blogs/?page=1`)
+    fetch(`https://blogapi.rayy.dev/v1/blogs/?page=1`)
         .then((res) => res.json())
         .then((data) => {
             setPageBlogs(data.data)
