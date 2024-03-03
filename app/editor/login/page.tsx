@@ -18,7 +18,7 @@ const Page = () => {
     const login = (e: FormEvent) => {
         e.preventDefault()
         setButtonDisabled(true)
-        fetch("http://localhost:3000/v1/auth/login/", {
+        fetch("https://api.blogs.rayy.dev/v1/auth/login/", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -40,7 +40,7 @@ const Page = () => {
 
     useEffect(()=>{
         if (cookieStore.get("token")) {
-            fetch("http://localhost:3000/v1/auth/validate/",{
+            fetch("https://api.blogs.rayy.dev/v1/auth/validate/",{
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -23,7 +23,7 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
     const [isError, setIsError] = useState(false)
 
     useEffect(()=>{
-        fetch(`http://localhost:3000/v1/blog/${props.params.slug}`)
+        fetch(`https://api.blogs.rayy.dev/v1/blog/${props.params.slug}`)
         .then((res) => res.json())
         .then((data) => {
             setBlogData(data)

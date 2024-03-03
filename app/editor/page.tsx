@@ -18,7 +18,7 @@ const Page = () => {
 
     const logout = () => {
         setIsLoading(true)
-        fetch("http://localhost:3000/v1/auth/logout/", {
+        fetch("https://api.blogs.rayy.dev/v1/auth/logout/", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -31,7 +31,7 @@ const Page = () => {
     }
 
     const getAccountData = () => {
-        fetch("http://localhost:3000/v1/auth/session-user/", {
+        fetch("https://api.blogs.rayy.dev/v1/auth/session-user/", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -46,7 +46,7 @@ const Page = () => {
 
     useEffect(()=>{
         if (cookieStore.get("token")) {
-            fetch("http://localhost:3000/v1/auth/validate/",{
+            fetch("https://api.blogs.rayy.dev/v1/auth/validate/",{
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
