@@ -86,8 +86,8 @@ const Page = () => {
           </div>
           </>
           :
-          <div className="flex w-full justify-center items-center mb-auto">
-            <h1 className="text-xl">Blogs coming soon! :D</h1>
+          <div className="flex w-full justify-center items-center mt-24 mb-48">
+            <h1 className="text-xl text-gray-500">Blogs coming soon! :D</h1>
           </div>
           }
         </div>
