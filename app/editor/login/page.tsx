@@ -61,7 +61,7 @@ const Page = () => {
         <EditorNavBar username={null}/>
         <div className="flex w-full h-3/4 justify-center items-center px-4 md:px-8">
             <form className="flex flex-col max-w-80 gap-8" onSubmit={login}>
-                <h1 className="text-2xl font-semibold w-full text-center">Log in to post blogs.</h1>
+                <h1 className="text-2xl font-medium w-full text-center">Log in to use the editor.</h1>
                 <div className="flex flex-col gap-4 rounded-md border bg-gray-50 bg-opacity-50 p-6">
                 <div className="">
                     <label htmlFor="username" className="text-sm text-gray-600">Username</label>

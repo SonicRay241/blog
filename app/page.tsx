@@ -55,7 +55,7 @@ const Page = () => {
           <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-40">
             {(latestBlogs && blogCount) ? 
-              latestBlogs?.map((blogData, n)=>{
+              latestBlogs.map((blogData, n)=>{
                 return (
                   <Link 
                     href={`/blog?p=${blogData.id}`} 
@@ -65,7 +65,7 @@ const Page = () => {
                       transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
                     }}
                   >
-                    <div className="flex flex-col h-full w-full justify-between">
+                    <div className="flex flex-col h-fit w-full justify-between">
                       <h1 className="font-medium text-black">{blogData.title}</h1>
                       <p 
                         className="font-medium text-gray-500 text-xs mt-6"
