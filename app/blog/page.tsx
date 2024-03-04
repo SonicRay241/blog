@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useEffect } from "react"
+import { FC, Suspense, useEffect } from "react"
 import Markdown from "react-markdown"
 import { useState } from "react"
 import Skeleton from "@/components/Skeleton"
@@ -12,8 +12,20 @@ import { oneDark as theme } from 'react-syntax-highlighter/dist/cjs/styles/prism
 import Link from "next/link"
 import NavBar from "@/components/Navbar"
 import { url } from "@/libs/url";
+import { useSearchParams } from "next/navigation"
 
-const Blog: FC<{ params: { slug: string } }> = (props) => {
+const Blog = () => {
+    return (
+        <Suspense>
+            <BlogPost/>
+        </Suspense>
+    )
+}
+
+const BlogPost = () => {
+    const searchParams = useSearchParams()
+    const blog = searchParams.get("p")
+
     const [blogData, setBlogData] = useState<{
         content: string;
         created_at: string;
@@ -24,7 +36,7 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
     const [isError, setIsError] = useState(false)
 
     useEffect(()=>{
-        fetch(`${url}/v1/blog/${props.params.slug}`)
+        fetch(`${url}/v1/blog/${blog}`)
         .then((res) => res.json())
         .then((data) => {
             setBlogData(data)
@@ -32,7 +44,7 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
         .catch(()=>{
             setIsError(true)
         })
-    }, [props.params.slug])
+    }, [blog])
 
     if (!isError)
     return (

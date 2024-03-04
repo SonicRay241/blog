@@ -58,7 +58,7 @@ const Page = () => {
               latestBlogs?.map((blogData, n)=>{
                 return (
                   <Link 
-                    href={`/blog/${blogData.id}`} 
+                    href={`/blog?p=${blogData.id}`} 
                     className="group p-6 rounded-lg border bg-white hover:bg-gray-100 drop-shadow-sm"
                     key={n}
                     style={{

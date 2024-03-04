@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { getCookie, setCookie, deleteCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import EditorNavBar from "@/components/editor/EditorNavbar"
@@ -19,7 +19,7 @@ const Page = () => {
     const [isError, setIsError] = useState(false)
     const router = useRouter()
 
-    const logout = () => {
+    const logout = useCallback(() => {
         setIsLoading(true)
         fetch(`${url}/v1/auth/logout/`, {
             method: "POST",
@@ -31,23 +31,23 @@ const Page = () => {
         .then(async (e) => console.log(e.text))
         deleteCookie("token")
         router.replace("/editor/login")
-    }
-
-    const getAccountData = () => {
-        fetch(`${url}/v1/auth/session-user/`, {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                token: getCookie("token")
-            })
-        })
-        .then(async (e) => {
-            const res = await e.text()
-            setAccountData(JSON.parse(res))
-        })
-    }
+    }, [])
 
     useEffect(()=>{
+        const getAccountData = () => {
+            fetch(`${url}/v1/auth/session-user/`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    token: getCookie("token")
+                })
+            })
+            .then(async (e) => {
+                const res = await e.text()
+                setAccountData(JSON.parse(res))
+            })
+        }
+
         if (getCookie("token")) {
             fetch(`${url}/v1/auth/validate/`,{
                 method: "POST",
@@ -69,7 +69,7 @@ const Page = () => {
                 setIsError(true)
             })
         } else router.replace("/editor/login")
-    }, [getAccountData, logout, router])
+    }, [logout, router])
 
     return (
         <>
