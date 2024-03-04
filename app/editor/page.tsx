@@ -110,6 +110,7 @@ const Page = () => {
                 }
             </div>
             :
+            <>
             <div className="flex w-full min-h-[75%] justify-center pt-32">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-screen-lg px-14">
                     { blogsData ?
@@ -134,17 +135,18 @@ const Page = () => {
                     }
                 </div>
             </div>
-        }
         <button 
-            className="fixed p-2 bottom-2 left-2 rounded-md hover:bg-red-500 hover:text-white text-red-500" 
-            onClick={logout}
-            style={{
-                transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
-            }}
+        className="fixed p-2 bottom-2 left-2 rounded-md hover:bg-red-500 hover:text-white text-red-500" 
+        onClick={logout}
+        style={{
+            transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+        }}
         >
             <Logout/>
         </button>
         <h1 className="fixed p-2 bottom-2 rounded-md bg-white border border-gray-200 left-1/2 -translate-x-1/2">Page: {currentPage} / {Math.ceil((blogCount ?? 10) / 10)}</h1>
+        </>
+        }
         </>
     )
 }
