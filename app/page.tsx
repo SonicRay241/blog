@@ -7,6 +7,7 @@ import Skeleton from "@/components/Skeleton";
 import Footer from "@/components/Footer";
 
 const Page = () => {
+  const [blogCount, setBlogCount] = useState<number | null>(null)
   const [pageBlogs, setPageBlogs] = useState<{
     created_at: string;
     id: string;
@@ -26,6 +27,7 @@ const Page = () => {
         .then((res) => res.json())
         .then((data) => {
             setPageBlogs(data.data)
+            setBlogCount(+data.count)
             setLatestBlogs(data.data.length >= 5 ? data.data.slice(5) : data.data)
         })
         .catch(()=>{
@@ -47,9 +49,11 @@ const Page = () => {
             </h1>
             <p className="mt-10 text-center text-gray-500">Inspiring creativity, overcoming programming obstacles, and innovating on technology.</p>
           </div>
-          <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
+          {(blogCount == null || blogCount > 0) &&
+          <>
+          <h1 className="mt-24 text-gray-500 font-medium">Latest Posts {blogCount}</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-48">
-            {latestBlogs ? 
+            {(latestBlogs && blogCount) ? 
               latestBlogs?.map((blogData, n)=>{
                 return (
                   <Link 
@@ -80,6 +84,8 @@ const Page = () => {
             }
             
           </div>
+          </>
+          }
         </div>
       </div>
       <Footer/>

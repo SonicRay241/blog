@@ -42,7 +42,7 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
                     <div className="flex w-full justify-center pt-12">
                         {
                             blogData ?
-                            <div className="prose sm:prose-sm md:prose-base prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar">
+                            <div className="prose prose-base sm:prose-lg md:prose-xl prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar">
                                 <h1 className="text-5xl md:text-7xl text-violet-600 mb-4 md:m-0 p-0 leading-none">{blogData.title}</h1>
                                 <p className="text-neutral-500 m-0 p-0 leading-none">{blogData.created_at.split("T")[0].split("-").reverse().join(".")} | {blogData.writer}</p>
                                 <br />

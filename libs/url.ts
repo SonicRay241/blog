@@ -1,0 +1,1 @@
+export const URL = process.env!.SERVER == "dev" ?  "localhost:3000" : "blogapi.rayy.dev"
