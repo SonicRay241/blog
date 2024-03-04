@@ -11,6 +11,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark as theme } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import Link from "next/link"
 import NavBar from "@/components/Navbar"
+import { url } from "@/libs/url";
 
 const Blog: FC<{ params: { slug: string } }> = (props) => {
     const [blogData, setBlogData] = useState<{
@@ -23,7 +24,7 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
     const [isError, setIsError] = useState(false)
 
     useEffect(()=>{
-        fetch(`https://blogapi.rayy.dev/v1/blog/${props.params.slug}`)
+        fetch(`${url}/v1/blog/${props.params.slug}`)
         .then((res) => res.json())
         .then((data) => {
             setBlogData(data)
@@ -31,7 +32,7 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
         .catch(()=>{
             setIsError(true)
         })
-    }, [])
+    }, [props.params.slug])
 
     if (!isError)
     return (
@@ -99,12 +100,15 @@ const Blog: FC<{ params: { slug: string } }> = (props) => {
     )
 
     return (
+        <>
+        <NavBar/>
         <div className="h-3/4 w-full flex justify-center items-center">
             <div className="flex flex-col items-center">
                 <h1 className="text-xl text-black">Blog not found.</h1>
                 <Link href="/" className="text-blue-500 hover:underline">Back</Link>
             </div>
         </div>
+        </>
     )
 }
 

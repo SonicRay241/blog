@@ -1,1 +1,6 @@
-export const URL = process.env!.SERVER == "dev" ?  "localhost:3000" : "blogapi.rayy.dev"
+const URLs = {
+    dev: "http://localhost:3000",
+    prod: "https://blogapi.rayy.dev"
+}
+
+export const url = URLs.dev

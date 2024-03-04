@@ -5,6 +5,7 @@ import NavBar from "@/components/Navbar";
 import Link from "next/link";
 import Skeleton from "@/components/Skeleton";
 import Footer from "@/components/Footer";
+import { url } from "@/libs/url";
 
 const Page = () => {
   const [blogCount, setBlogCount] = useState<number | null>(null)
@@ -23,7 +24,7 @@ const Page = () => {
   const [isError, setIsError] = useState(false)
 
   useEffect(()=>{
-    fetch(`https://blogapi.rayy.dev/v1/blogs/?page=1`)
+    fetch(`${url}/v1/blogs/?page=1`)
         .then((res) => res.json())
         .then((data) => {
             setPageBlogs(data.data)
@@ -52,16 +53,16 @@ const Page = () => {
           {(blogCount == null || blogCount > 0) ?
           <>
           <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-48">
+          <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-40">
             {(latestBlogs && blogCount) ? 
               latestBlogs?.map((blogData, n)=>{
                 return (
                   <Link 
                     href={`/blog/${blogData.id}`} 
-                    className="p-6 rounded-lg border bg-gray-50 bg-opacity-50 hover:bg-gray-100"
+                    className="group p-6 rounded-lg border bg-white hover:bg-gray-100 drop-shadow-sm"
                     key={n}
                     style={{
-                      transition: "background-color 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+                      transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
                     }}
                   >
                     <div className="flex flex-col h-full w-full justify-between">

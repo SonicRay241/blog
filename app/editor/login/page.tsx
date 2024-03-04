@@ -1,10 +1,11 @@
 "use client"
 
 import Spinner from "@/components/Spinner"
-import { useCookies } from "next-client-cookies"
+import { getCookie, deleteCookie, setCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState, useEffect } from "react"
-import EditorNavBar from "@/components/EditorNavbar"
+import EditorNavBar from "@/components/editor/EditorNavbar"
+import { url } from "@/libs/url";
 
 const Page = () => {
     const [usernameValue, setUsernameValue] = useState("")
@@ -12,13 +13,12 @@ const Page = () => {
     const [message, setMessage] = useState("")
     const [buttonDisabled, setButtonDisabled] = useState(false)
 
-    const cookieStore = useCookies()
     const router = useRouter()
 
     const login = (e: FormEvent) => {
         e.preventDefault()
         setButtonDisabled(true)
-        fetch("https://blogapi.rayy.dev/v1/auth/login/", {
+        fetch(`${url}/v1/auth/login/`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -31,7 +31,7 @@ const Page = () => {
             if (res == "Invalid Credentials" || res == "Failed to create session") {
                 setMessage(res)
             } else {
-                cookieStore.set("token", res)
+                setCookie("token", res)
                 router.replace("/editor")
             }
             setButtonDisabled(false)
@@ -39,12 +39,12 @@ const Page = () => {
     }
 
     useEffect(()=>{
-        if (cookieStore.get("token")) {
-            fetch("https://blogapi.rayy.dev/v1/auth/validate/",{
+        if (getCookie("token")) {
+            fetch(`${url}/v1/auth/validate/`,{
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    token: cookieStore.get("token")
+                    token: getCookie("token")
                 })
             })
             .then(async (e) => {
@@ -54,11 +54,11 @@ const Page = () => {
                 }
             })
         }
-    }, [])
+    }, [router])
 
     return (
         <>
-        <EditorNavBar username={cookieStore.get("token") ?? null}/>
+        <EditorNavBar username={null}/>
         <div className="flex w-full h-3/4 justify-center items-center px-4 md:px-8">
             <form className="flex flex-col max-w-80 gap-8" onSubmit={login}>
                 <h1 className="text-2xl font-semibold w-full text-center">Log in to post blogs.</h1>
