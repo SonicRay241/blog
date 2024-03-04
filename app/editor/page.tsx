@@ -31,7 +31,7 @@ const Page = () => {
         .then(async (e) => console.log(e.text))
         deleteCookie("token")
         router.replace("/editor/login")
-    }, [])
+    }, [router])
 
     useEffect(()=>{
         const getAccountData = () => {
