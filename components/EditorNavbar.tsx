@@ -7,9 +7,10 @@ import { FC } from "react"
 
 const EditorNavBar: FC<{
     username: string | null
+    fixed?: boolean
 }> = (props) => {
     return (
-        <nav className="flex justify-between flex-row h-16 items-center px-4 sm:px-8">
+        <nav className={`${props.fixed ? "fixed w-full" : ""} flex justify-between flex-row h-16 items-center px-4 sm:px-8`}>
             <Link href="/">
                 <h1 className="text-2xl font-semibold">rayy<span className="text-violet-600">.dev</span><span className="text-sm text-gray-400">/blogs</span></h1>
             </Link>
@@ -23,12 +24,9 @@ const EditorNavBar: FC<{
                 { props.username &&
                 <>
                     <div className="h-6 w-1 border-l-2 border-violet-600"/>
-                    <button className="flex text-lg items-center gap-2 hover:underline">
-                        <p>
-                            {props.username}
-                        </p>
-                        <KeyboardArrowDown/>
-                    </button>
+                    <p className="text-lg">
+                        {props.username}
+                    </p>
                 </>
                 }
             </div>

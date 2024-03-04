@@ -5,6 +5,7 @@ import { useCookies } from "next-client-cookies"
 import { useRouter } from "next/navigation"
 import EditorNavBar from "@/components/EditorNavbar"
 import Spinner from "@/components/Spinner"
+import { Logout } from "@mui/icons-material"
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -67,17 +68,25 @@ const Page = () => {
 
     return (
         <>
-        <EditorNavBar username={accountData?.name ?? null}/>
+        <EditorNavBar username={accountData?.name ?? null} fixed/>
         {isLoading ? 
             <div className=" flex w-full h-3/4 justify-center items-center">
                 <Spinner className="h-10 w-10"/>
             </div>
             :
-            <div className="w-full">
-                <h1>Amongus</h1>
-                <button onClick={logout}>LOGOUT</button>
+            <div className="flex w-full h-3/4 justify-center items-center">
+                <div className="w-full max-w-screen-md">a</div>
             </div>
         }
+        <button 
+            className="fixed p-2 bottom-2 left-2 rounded-md hover:bg-red-500 hover:text-white text-red-500" 
+            onClick={logout}
+            style={{
+                transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+            }}
+        >
+            <Logout/>
+        </button>
         </>
     )
 }
