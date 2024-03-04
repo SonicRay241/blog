@@ -29,12 +29,12 @@ const Footer = () => {
                 className=""
             >     
                 <h1 
-                    className="text-4xl mb-16 w-fit h-fit"
+                    className="text-4xl mb-3 md:mb-16 w-fit h-fit"
                 >
                     <span className="text-violet-600">/</span>RAYHAN PERMANA
                 </h1>
             </div>
-            <div className="flex">
+            <div className="flex flex-col md:flex-row gap-8 md:gap-0">
                 <div className="w-full">
                     <div 
                         className="flex flex-wrap gap-2 w-fit"
@@ -50,7 +50,7 @@ const Footer = () => {
                         <h2 className="text-base">in Jakarta, Indonesia.</h2>
                     </div>
                 </div>
-                <div className="flex w-full gap-5 justify-end">
+                <div className="flex w-full gap-5 justify-start md:justify-end flex-wrap">
                     {contacts.map((c, n)=>{
                         return (
                             <ExternalUrl
