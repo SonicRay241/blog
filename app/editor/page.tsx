@@ -96,7 +96,7 @@ const Page = () => {
                 setIsError(true)
             })
         } else router.replace("/editor/login")
-    }, [logout, router])
+    }, [logout, router, getBlogs])
 
     return (
         <>
