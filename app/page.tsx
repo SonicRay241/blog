@@ -49,9 +49,9 @@ const Page = () => {
             </h1>
             <p className="mt-10 text-center text-gray-500">Inspiring creativity, overcoming programming obstacles, and innovating on technology.</p>
           </div>
-          {(blogCount == null || blogCount > 0) &&
+          {(blogCount == null || blogCount > 0) ?
           <>
-          <h1 className="mt-24 text-gray-500 font-medium">Latest Posts {blogCount}</h1>
+          <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-48">
             {(latestBlogs && blogCount) ? 
               latestBlogs?.map((blogData, n)=>{
@@ -85,6 +85,10 @@ const Page = () => {
             
           </div>
           </>
+          :
+          <div className="flex w-full justify-center items-center mb-auto">
+            <h1 className="text-xl">Blogs coming soon! :D</h1>
+          </div>
           }
         </div>
       </div>
