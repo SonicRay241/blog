@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, Suspense } from "react"
 import { url } from "@/libs/url"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import { getCookie, deleteCookie } from "cookies-next"
@@ -133,4 +133,12 @@ const Editor = () => {
   )
 }
 
-export default Editor
+const Page = () => {
+  return (
+    <Suspense>
+      <Editor/>
+    </Suspense>
+  )
+}
+
+export default Page
