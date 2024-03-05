@@ -9,12 +9,12 @@ import { url } from "@/libs/url";
 
 const Page = () => {
   const [blogCount, setBlogCount] = useState<number | null>(null)
-  const [pageBlogs, setPageBlogs] = useState<{
-    created_at: string;
-    id: string;
-    title: string;
-    writer: string;
-  }[] | null>(null)
+  // const [pageBlogs, setPageBlogs] = useState<{
+  //   created_at: string;
+  //   id: string;
+  //   title: string;
+  //   writer: string;
+  // }[] | null>(null)
   const [latestBlogs, setLatestBlogs] = useState<{
     created_at: string;
     id: string;
@@ -22,14 +22,18 @@ const Page = () => {
     writer: string;
   }[] | null>(null)
   const [isError, setIsError] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(()=>{
+    if (!isLoaded)
     fetch(`${url}/v1/blogs/?page=1`)
         .then((res) => res.json())
         .then((data) => {
-            setPageBlogs(data.data)
+            // setPageBlogs(data.data)
             setBlogCount(+data.count)
             setLatestBlogs(data.data.length >= 5 ? data.data.slice(5) : data.data)
+            setIsLoaded(true)
+            console.log("we")
         })
         .catch(()=>{
             setIsError(true)

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FC } from "react"
 
 const BlogCard: FC<{
@@ -8,7 +9,7 @@ const BlogCard: FC<{
     writer: string | null;
 }> = (props) => {
     return (
-        <div className="group p-6 rounded-lg border bg-white hover:bg-gray-100 drop-shadow-sm">
+        <Link href={`/editor/blog?q=${props.id}`} className="group p-6 rounded-lg border bg-white hover:bg-gray-100 drop-shadow-sm">
             <div className="flex flex-col h-full w-full justify-between">
                 <h1 className="font-medium text-black">{props.title}</h1>
                 <div className="flex justify-between">
@@ -24,7 +25,7 @@ const BlogCard: FC<{
                 </p>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

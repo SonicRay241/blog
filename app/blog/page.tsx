@@ -25,6 +25,7 @@ const Blog = () => {
 const BlogPost = () => {
     const searchParams = useSearchParams()
     const blog = searchParams.get("p")
+    const [isLoaded, setIsLoaded] = useState(false)
 
     const [blogData, setBlogData] = useState<{
         content: string;
@@ -32,14 +33,18 @@ const BlogPost = () => {
         id: string;
         title: string;
         writer: string | null;
+        hidden: boolean;
     } | null>(null)
     const [isError, setIsError] = useState(false)
 
     useEffect(()=>{
+        if (!isLoaded)
         fetch(`${url}/v1/blog/${blog}`)
         .then((res) => res.json())
         .then((data) => {
             setBlogData(data)
+            setIsLoaded(true)
+            console.log("we")
         })
         .catch(()=>{
             setIsError(true)
@@ -50,7 +55,14 @@ const BlogPost = () => {
     return (
         <>
             <NavBar/>
-            <div className="w-full flex justify-center">
+            <div className="w-full flex flex-col items-center">
+                {
+                    blogData &&
+                    blogData.hidden &&
+                    <div className="w-full flex justify-center bg-red-500 py-2">
+                        <h1 className="text-white font-medium">This blog is archived by the creator.</h1>
+                    </div>
+                }
                 <div className="w-full max-w-screen-lg text-neutral-900 px-4 sm:px-8">
                     <div className="flex w-full justify-center pt-12">
                         {

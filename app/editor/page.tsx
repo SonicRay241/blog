@@ -57,6 +57,7 @@ const Page = () => {
             setBlogCount(+res.count)
             setBlogsData(res.data)
             setIsLoading(false)
+            console.log("wa")
         })
     }
 
@@ -76,6 +77,7 @@ const Page = () => {
             getBlogs()
         }
 
+        if (isLoading)
         if (getCookie("token")) {
             fetch(`${url}/v1/auth/validate/`,{
                 method: "POST",
@@ -94,14 +96,15 @@ const Page = () => {
             })
             .catch(()=>{
                 setIsError(true)
+                setIsLoading(true)
             })
         } else router.replace("/editor/login")
     }, [logout, router, getBlogs])
 
     return (
         <>
-        <EditorNavBar username={accountData?.name ?? null} fixed/>
-        {isLoading ? 
+        <EditorNavBar username={accountData?.name ?? null} fixed useLoading/>
+        {(isError || isLoading) ? 
             <div className="flex w-full h-3/4 justify-center items-center">
                 {isError ? 
                     <h1 className="text-2xl">Something went wrong.</h1>
@@ -144,7 +147,7 @@ const Page = () => {
         >
             <Logout/>
         </button>
-        <h1 className="fixed p-2 bottom-2 rounded-md bg-white border border-gray-200 left-1/2 -translate-x-1/2">Page: {currentPage} / {Math.ceil((blogCount ?? 10) / 10)}</h1>
+        <h1 className="fixed p-2 bottom-2 rounded-md bg-white border border-gray-200 left-1/2 -translate-x-1/2 text-gray-600">Page: {currentPage} / {Math.ceil((blogCount ?? 10) / 10)}</h1>
         </>
         }
         </>

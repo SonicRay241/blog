@@ -12,6 +12,7 @@ const Page = () => {
     const [passwordValue, setPasswordValue] = useState("")
     const [message, setMessage] = useState("")
     const [buttonDisabled, setButtonDisabled] = useState(false)
+    const [isError, setIsError] = useState(false)
 
     const router = useRouter()
 
@@ -39,6 +40,7 @@ const Page = () => {
     }
 
     useEffect(()=>{
+        if (!isError)
         if (getCookie("token")) {
             fetch(`${url}/v1/auth/validate/`,{
                 method: "POST",
@@ -53,8 +55,23 @@ const Page = () => {
                     router.replace("/editor")
                 }
             })
+            .catch((e) => {
+                setIsError(true)
+            })
         }
+        console.log("wa");
+        
     }, [router])
+
+    if (isError)
+    return (
+        <>
+            <EditorNavBar username={null}/>
+            <div className="flex w-full h-3/4 justify-center items-center px-4 md:px-8">
+                <h1 className="text-xl text-black">Something went wrong.</h1>
+            </div>
+        </>
+    )
 
     return (
         <>
