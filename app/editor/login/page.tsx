@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation"
 import { FormEvent, useState, useEffect } from "react"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import { url } from "@/libs/url";
+import toast from "react-hot-toast"
 
 const Page = () => {
     const [usernameValue, setUsernameValue] = useState("")
     const [passwordValue, setPasswordValue] = useState("")
     const [message, setMessage] = useState("")
+    const [highlightRed, setHighlightRed] = useState(false)
     const [buttonDisabled, setButtonDisabled] = useState(false)
     const [isError, setIsError] = useState(false)
 
@@ -30,7 +32,11 @@ const Page = () => {
         .then(async (e) => {
             const res = await e.text()
             if (res == "Invalid Credentials" || res == "Failed to create session") {
-                setMessage(res)
+                toast.error(res)
+                if (res == "Invalid Credentials") {
+                    setHighlightRed(true)
+                    setMessage(res)
+                }
             } else {
                 setCookie("token", res)
                 router.replace("/editor")
@@ -59,7 +65,6 @@ const Page = () => {
                 setIsError(true)
             })
         }
-        console.log("wa");
         
     }, [router])
 
@@ -81,21 +86,21 @@ const Page = () => {
                 <h1 className="text-2xl font-medium w-full text-center">Log in to use the editor.</h1>
                 <div className="flex flex-col gap-4 rounded-md border bg-gray-50 bg-opacity-50 p-6">
                 <div className="">
-                    <label htmlFor="username" className="text-sm text-gray-600">Username</label>
+                    <label htmlFor="username" className={`text-sm ${ highlightRed ? "text-red-600" : "text-gray-600"}`}>Username</label>
                     <input 
                         type="text" 
                         value={usernameValue} 
                         onChange={e => setUsernameValue(e.target.value)}
-                        className="w-full focus:outline-violet-600 p-2 rounded-md border border-gray-300" 
+                        className={`w-full focus:outline-violet-600 p-2 rounded-md border ${ highlightRed ? "border-red-600" : "border-gray-300"}`}
                     />
                 </div>
                 <div className="">
-                    <label htmlFor="username" className="text-sm text-gray-600">Password</label>
+                    <label htmlFor="username" className={`text-sm ${ highlightRed ? "text-red-600" : "text-gray-600"}`}>Password</label>
                     <input 
                         type="password" 
                         value={passwordValue} 
                         onChange={e => setPasswordValue(e.target.value)}
-                        className="w-full focus:outline-violet-600 p-2 rounded-md border border-gray-300" 
+                        className={`w-full focus:outline-violet-600 p-2 rounded-md border ${ highlightRed ? "border-red-600" : "border-gray-300"}`}
                     />
                     <p className="p-1 text-red-600">{message}</p>
                 </div>

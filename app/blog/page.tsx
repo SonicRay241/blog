@@ -44,7 +44,6 @@ const BlogPost = () => {
         .then((data) => {
             setBlogData(data)
             setIsLoaded(true)
-            console.log("we")
         })
         .catch(()=>{
             setIsError(true)

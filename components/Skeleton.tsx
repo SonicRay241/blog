@@ -2,7 +2,7 @@ import { FC } from "react";
 
 const Skeleton: FC<{
     width?: number | "full" | string
-    height?: number
+    height?: number | "full"
     rounded?: number | "full"
     className?: string
 }> = (props) => {
@@ -11,7 +11,7 @@ const Skeleton: FC<{
             <div 
                 style={{ 
                     width: props.width == "full" ? "100%" : props.width ?? 120,
-                    height: props.height ?? 40,
+                    height: props.height == "full" ? "100%" : props.height ?? 40,
                     borderRadius: props.rounded == "full" ? "50%" : props.rounded ?? 6
                 }}
                 className={`bg-gray-200 ${props.className}`}

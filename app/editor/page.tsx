@@ -5,10 +5,13 @@ import { getCookie, setCookie, deleteCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import Spinner from "@/components/Spinner"
-import { Logout } from "@mui/icons-material"
+import { Add, KeyboardArrowLeft, KeyboardArrowRight, Logout } from "@mui/icons-material"
 import { url } from "@/libs/url"
 import Skeleton from "@/components/Skeleton"
 import BlogCard from "@/components/editor/BlogCard"
+import Link from "next/link"
+import NewModal from "@/components/editor/NewModal"
+import toast from "react-hot-toast"
 
 const Page = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -27,18 +30,23 @@ const Page = () => {
     }[] | null>(null)
 
     const [isError, setIsError] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [arrowDisabled, setArrowDisabled] = useState(false)
+    const [showSkeleton, setShowSkeleton] = useState(false)
+
     const router = useRouter()
 
     const logout = useCallback(() => {
         setIsLoading(true)
-        fetch(`${url}/v1/auth/logout/`, {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                token: getCookie("token"),
+        if (getCookie("token"))
+            fetch(`${url}/v1/auth/logout/`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    token: getCookie("token"),
+                })
             })
-        })
-        .then(async (e) => console.log(e.text))
+            .then(async (e) => console.log(e.text))
         deleteCookie("token")
         router.replace("/editor/login")
     }, [router])
@@ -57,11 +65,16 @@ const Page = () => {
             setBlogCount(+res.count)
             setBlogsData(res.data)
             setIsLoading(false)
-            console.log("wa")
+            setShowSkeleton(false)
+            setArrowDisabled(false)
+        })
+        .catch(()=>{
+            toast.error("Something went wrong when fetching blogs.")
         })
     }
 
     useEffect(()=>{
+        if (showSkeleton && arrowDisabled) getBlogs()
         const getAccountData = () => {
             fetch(`${url}/v1/auth/session-user/`, {
                 method: "POST",
@@ -89,6 +102,7 @@ const Page = () => {
             .then(async (e) => {
                 const valid = await e.text()
                 if (valid == "false") {
+                    toast.error("Invalid session, please log in again.")
                     logout()
                 } else {
                     getAccountData()
@@ -103,6 +117,7 @@ const Page = () => {
 
     return (
         <>
+        <NewModal show={showModal} cancelCallback={()=>{setShowModal(false)}} reloadCallback={()=>{setIsLoading(true); getBlogs()}}/>
         <EditorNavBar username={accountData?.name ?? null} fixed useLoading/>
         {(isError || isLoading) ? 
             <div className="flex w-full h-3/4 justify-center items-center">
@@ -114,40 +129,88 @@ const Page = () => {
             </div>
             :
             <>
-            <div className="flex w-full min-h-[75%] justify-center pt-32">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-screen-lg px-14">
-                    { blogsData ?
-                        blogsData?.map((b, n)=>{
-                            return (
-                                <BlogCard
+            <div className="w-full md:h-full pt-24 pb-16 md:pt-32 md:pb-24">
+                <div className="flex w-full h-full justify-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 gap-4 w-full max-w-screen-lg px-8 md:px-14">
+                        { (blogsData && !showSkeleton ) ?
+                            blogsData?.map((b, n)=>{
+                                return (
+                                    <BlogCard
                                     created_at={b.created_at}
                                     id={b.id}
                                     hidden={b.hidden}
                                     title={b.title}
                                     writer={b.writer}
                                     key={n}
-                                />
-                            )
-                        })
-                    :
-                        [...Array(10)].map((_, n)=>{
-                            return (
-                                <Skeleton width={"full"} height={96} key={n}/>
-                            )
-                        })
-                    }
+                                    />
+                                )
+                            })
+                        :
+                            [...Array(6)].map((_, n)=>{
+                                return (
+                                    <Skeleton width="full" height="full" key={n}/>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
         <button 
-        className="fixed p-2 bottom-2 left-2 rounded-md hover:bg-red-500 hover:text-white text-red-500" 
-        onClick={logout}
-        style={{
-            transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
-        }}
+            className="fixed p-2 bottom-2 left-2 rounded-md hover:bg-red-500 hover:text-white text-red-500" 
+            onClick={logout}
+            style={{
+                transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+            }}
         >
             <Logout/>
         </button>
-        <h1 className="fixed p-2 bottom-2 rounded-md bg-white border border-gray-200 left-1/2 -translate-x-1/2 text-gray-600">Page: {currentPage} / {Math.ceil((blogCount ?? 10) / 10)}</h1>
+        <button 
+            className="fixed p-2 bottom-2 right-2 rounded-md hover:bg-gray-200 text-gray-500" 
+            onClick={()=>setShowModal(true)}
+            style={{
+                transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+            }}
+        >
+            <Add/>
+        </button>
+        <div className="flex fixed bottom-2 gap-2 left-1/2 -translate-x-1/2">
+            <button
+                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100"
+                style={{
+                    transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+                }}
+                onClick={() => {
+                    if (currentPage > 1) {
+                        setCurrentPage(currentPage - 1)
+                        setArrowDisabled(true)
+                        setShowSkeleton(true)
+                    }
+                }}
+                disabled={arrowDisabled}
+            >
+                <KeyboardArrowLeft/>
+            </button>
+            <div className="flex gap-2 p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:cursor-default">
+                <h1 className="text-nowrap">Page</h1>
+                <h1 className="text-nowrap">{currentPage} / {Math.ceil(((blogCount ?? 1) + 1) / 6)}</h1>
+            </div>
+            <button
+                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100"
+                style={{
+                    transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+                }}
+                onClick={() => {
+                    if (currentPage < Math.ceil(((blogCount ?? 1) + 1) / 6)) {
+                        setCurrentPage(currentPage + 1)
+                        setArrowDisabled(true)
+                        setShowSkeleton(true)
+                    }
+                }}
+                disabled={arrowDisabled}
+            >
+                <KeyboardArrowRight/>
+            </button>
+        </div>
         </>
         }
         </>
