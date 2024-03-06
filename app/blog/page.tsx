@@ -96,6 +96,20 @@ const BlogPost = () => {
                                                 </code>
                                             );
                                         },
+                                        a({ node, inline, className, children, ...props }: any) {
+                                            return (
+                                                <a 
+                                                    className={className}
+                                                    style={{
+                                                        color: "#3b82f6"
+                                                    }}
+                                                    target="_blank"
+                                                    {...props}
+                                                >
+                                                    {children}
+                                                </a>
+                                            )
+                                        }
                                     }}
                                 >
                                     {blogData.content}

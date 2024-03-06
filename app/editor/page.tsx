@@ -12,6 +12,7 @@ import BlogCard from "@/components/editor/BlogCard"
 import Link from "next/link"
 import NewModal from "@/components/editor/NewModal"
 import toast from "react-hot-toast"
+import { langs } from "@/components/editor/codeblocklang"
 
 const Page = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -153,6 +154,7 @@ const Page = () => {
                             })
                         }
                     </div>
+                
                 </div>
             </div>
         <button 
@@ -175,7 +177,7 @@ const Page = () => {
         </button>
         <div className="flex fixed bottom-2 gap-2 left-1/2 -translate-x-1/2">
             <button
-                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100"
+                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100 disabled:hover:cursor-not-allowed"
                 style={{
                     transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
                 }}
@@ -186,7 +188,7 @@ const Page = () => {
                         setShowSkeleton(true)
                     }
                 }}
-                disabled={arrowDisabled}
+                disabled={arrowDisabled || currentPage < 2}
             >
                 <KeyboardArrowLeft/>
             </button>
@@ -195,7 +197,7 @@ const Page = () => {
                 <h1 className="text-nowrap">{currentPage} / {Math.ceil(((blogCount ?? 1) + 1) / 6)}</h1>
             </div>
             <button
-                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100"
+                className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100 disabled:hover:cursor-not-allowed"
                 style={{
                     transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
                 }}
@@ -206,7 +208,7 @@ const Page = () => {
                         setShowSkeleton(true)
                     }
                 }}
-                disabled={arrowDisabled}
+                disabled={arrowDisabled || currentPage >= Math.ceil(((blogCount ?? 1) + 1) / 6)}
             >
                 <KeyboardArrowRight/>
             </button>

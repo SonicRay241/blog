@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState, useCallback, Suspense } from "react"
+import { useEffect, useState, useCallback, Suspense, useRef } from "react"
 import { url } from "@/libs/url"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import { getCookie, deleteCookie } from "cookies-next"
@@ -11,6 +11,8 @@ import Link from "next/link"
 import Spinner from "@/components/Spinner"
 import DeleteModal from "@/components/editor/DeleteModal"
 import { TextareaAutosize } from "@mui/material"
+// import '@mdxeditor/editor/style.css'
+import dynamic from "next/dynamic"
 
 const Editor = () => {
   const [accountData, setAccountData] = useState<{
@@ -30,7 +32,8 @@ const Editor = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const [blogTitle, setBlogTitle] = useState("")
-  const [blogContent, setBlogContent] = useState<string[]>([])
+
+  const EditorComp = dynamic(() => import('@/components/editor/EditorComponent'), { ssr: false })
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -43,7 +46,7 @@ const Editor = () => {
       .then((data) => {        
         setInitialBlogData(data)
         setBlogTitle(data.title)
-        setBlogContent(data.content.split("\n"))
+        
         setIsLoading(false)
       })
       .catch((e)=>{
@@ -161,15 +164,22 @@ const Editor = () => {
                 value={blogTitle} 
                 onChange={e => setBlogTitle(e.target.value)}
               />
-            <div className="px-4">
-              <p className="text-neutral-500 m-0 p-0 leading-none text-lg">{initialBlogData?.created_at.split("T")[0].split("-").reverse().join(".")} | {initialBlogData?.writer}</p>
-              {
+            <div className="">
+              <p className="px-4 text-neutral-500 m-0 p-0 leading-none text-lg mb-4">{initialBlogData?.created_at.split("T")[0].split("-").reverse().join(".")} | {initialBlogData?.writer}</p>
+              {/* {
                 blogContent.map((s, n)=>{
                   return (
                     <p key={n}>{s}</p>
                   )
                 })
-              }
+              } */}
+              {/* <Remirror manager={manager} initialContent={initialBlogData?.content}/> */}
+            
+            <Suspense>
+              <div className="prose prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar text-neutral-900 prose-headings:font-semibold">
+                <EditorComp markdown={initialBlogData?.content ?? ""}/>
+              </div>
+            </Suspense>
             </div>
           </div>
         </div>
