@@ -14,6 +14,7 @@ import NavBar from "@/components/Navbar"
 import { url } from "@/libs/url";
 import { useSearchParams } from "next/navigation"
 import EditorComp from "@/components/editor/EditorComponent"
+import Footer from "@/components/Footer"
 
 const Blog = () => {
     return (
@@ -55,7 +56,7 @@ const BlogPost = () => {
     return (
         <>
             <NavBar/>
-            <div className="w-full flex flex-col items-center">
+            <div className="w-full flex flex-col items-center pb-64">
                 {
                     blogData &&
                     blogData.hidden &&
@@ -144,6 +145,7 @@ const BlogPost = () => {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     )
 

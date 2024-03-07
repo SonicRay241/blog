@@ -29,7 +29,7 @@ const Footer = () => {
                 className=""
             >     
                 <h1 
-                    className="text-4xl mb-3 md:mb-16 w-fit h-fit"
+                    className="text-4xl mb-3 w-fit h-fit font-medium"
                 >
                     <span className="text-violet-600">/</span>RAYHAN PERMANA
                 </h1>
