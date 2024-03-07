@@ -25,6 +25,7 @@ import {
   CodeMirrorEditor,
   InsertImage,
   InsertTable,
+  linkDialogPlugin,
 } from "@mdxeditor/editor"
 import {FC} from 'react'
 import { langs } from "./codeblocklang"
@@ -103,11 +104,12 @@ const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?:
       placeholder="Type markdown here..."
       readOnly={props.readOnly}
       plugins={[
-        headingsPlugin(),
+        headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4, 5, 6] }),
         listsPlugin(),
         quotePlugin(),
         thematicBreakPlugin(),
-        // toolbarPlugin(),
+        linkPlugin(),
+        linkDialogPlugin(),
         codeBlockPlugin({ defaultCodeBlockLanguage: 'js', codeBlockEditorDescriptors: [PlainTextCodeEditorDescriptor]}),
         codeMirrorPlugin({
           codeBlockLanguages: langs,
@@ -118,29 +120,12 @@ const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?:
           imageUploadHandler: async (image) => {
             const imageBuffer = await image.arrayBuffer()
             const b64 = encode(imageBuffer)
-            // const res = fetch(`${url}/v1/image/upload/`, {
-            //   method: "POST",
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({
-            //     token: getCookie("token"),
-            //     imageB64: b64
-            //   })
-            // })
-            // .then(async (e) => {
-            //   const res = await e.text()
-            //   return res
-            // })
-            // .catch((e) => {
-            //   return "https://alcnfiswewhrojhwglgi.supabase.co/storage/v1/object/public/images/ERROR.gif?t=2024-03-07T08%3A37%3A06.114Z"
-            // })
-
             const res = "data:image/png;base64, " + b64
             return new Promise<string>((resolve, reject) => {
                 resolve(res);
             })
           },
         }),
-        linkPlugin(),
         frontmatterPlugin(),
         diffSourcePlugin(),
         markdownShortcutPlugin(),

@@ -59,7 +59,7 @@ const BlogPost = () => {
                 {
                     blogData &&
                     blogData.hidden &&
-                    <div className="w-full flex justify-center bg-red-500 py-2">
+                    <div className="sticky top-0 w-full flex justify-center bg-red-500 py-2">
                         <h1 className="text-white font-medium">This blog is archived by the creator.</h1>
                     </div>
                 }
@@ -67,9 +67,9 @@ const BlogPost = () => {
                     <div className="flex w-full justify-center pt-12">
                         {
                             blogData ?
-                            <div className="prose prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar">
-                                <h1 className="text-5xl md:text-7xl text-violet-600 mb-4 md:mb-8 p-0 leading-none">{blogData.title}</h1>
-                                <p className="text-neutral-500 m-0 p-0 leading-none">{blogData.created_at.split("T")[0].split("-").reverse().join(".")} | {blogData.writer}</p>
+                            <div className="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar">
+                                <h1 className="text-4xl sm:text-5xl md:text-6xl text-violet-600 mb-4 md:mb-8 p-0 leading-none">{blogData.title}</h1>
+                                <p className="text-neutral-500 m-0 p-0 leading-none text-sm sm:text-base md:text-lg">{blogData.created_at.split("T")[0].split("-").reverse().join(".")} | {blogData.writer}</p>
                                 <br />
                                 <Markdown 
                                     rehypePlugins={[rehypeRaw]}

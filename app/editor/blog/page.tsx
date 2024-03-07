@@ -12,9 +12,9 @@ import Spinner from "@/components/Spinner"
 import DeleteModal from "@/components/editor/DeleteModal"
 import { TextareaAutosize } from "@mui/material"
 // import '@mdxeditor/editor/style.css'
-import { MDXEditorMethods } from "@mdxeditor/editor"
 import EditorComp from "@/components/editor/EditorComponent"
 import toast from "react-hot-toast"
+import { BoldItalicUnderlineToggles, CodeToggle, CreateLink, UndoRedo } from "@mdxeditor/editor"
 
 const Editor = () => {
   const [accountData, setAccountData] = useState<{
@@ -53,7 +53,6 @@ const Editor = () => {
         token: getCookie("token"),
         content: editorContent,
         blogId: blog ?? "",
-        changeTitle: !(blogTitle == initialBlogData?.title),
         newTitle: blogTitle
       })
     })
@@ -75,8 +74,8 @@ const Editor = () => {
       .then((res) => res.json())
       .then((data) => {        
         setInitialBlogData(data)
-        setBlogTitle(data.title)
-        setEditorContent(data.content)
+        setBlogTitle(`${data.title}`)
+        setEditorContent(`${data.content}`)
 
         setIsLoading(false)
       })
@@ -181,7 +180,7 @@ const Editor = () => {
           <DeleteOutline/>
         </button>
         <button 
-          className={`disabled:invisible fixed z-40 p-2 top-20 right-2 rounded-md hover:bg-violet-600 hover:text-white text-violet-600 backdrop-blur-sm bg-white/60` }
+          className={`disabled:invisible fixed z-40 p-2 top-[72px] right-2 rounded-md hover:bg-violet-600 hover:text-white text-violet-600 backdrop-blur-sm bg-white/60` }
           onClick={() => saveContent()}
           style={{
             transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
@@ -196,12 +195,12 @@ const Editor = () => {
          */
         }
         <div className="flex w-full justify-center pt-20">
-          <div className="w-full max-w-screen-lg px-4 md:px-8">
+          <div className="w-full max-w-screen-lg md:px-4">
               <p className={`${blogTitle == "" ? "opacity-100" : "opacity-0"} text-red-500`}>
                 Title must not be empty.
               </p>
               <TextareaAutosize
-                className={`pt-6 font-bold text-5xl md:text-7xl text-violet-600 w-full h-fit p-4 resize-none outline-none rounded-md ${blogTitle == "" ? "border border-red-500" : ""}`}
+                className={`pt-6 font-bold text-4xl sm:text-5xl md:text-6xl text-violet-600 w-full h-fit p-4 resize-none outline-none rounded-md ${blogTitle == "" ? "border border-red-500" : ""}`}
                 value={blogTitle} 
                 onChange={e => {
                   setBlogTitle(e.target.value)
@@ -209,9 +208,9 @@ const Editor = () => {
                 }}
               />
             <div className="">
-              <p className="px-4 text-neutral-500 m-0 p-0 leading-none text-lg mb-4">{initialBlogData?.created_at.split("T")[0].split("-").reverse().join(".")} | {initialBlogData?.writer}</p>
+              <p className="px-4 text-neutral-500 m-0 p-0 leading-none text-sm sm:text-base md:text-lg mb-4">{initialBlogData?.created_at.split("T")[0].split("-").reverse().join(".")} | {initialBlogData?.writer}</p>
             <Suspense>
-              <div className="prose prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar text-neutral-900 prose-headings:font-semibold">
+              <div className="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar text-neutral-900 prose-headings:font-semibold pb-96">
                 <EditorComp markdown={editorContent} setState={setEditorContent} enableSaveBtn={setSaveBtn}/>
               </div>
             </Suspense>

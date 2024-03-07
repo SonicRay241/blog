@@ -5,14 +5,12 @@ import { getCookie, setCookie, deleteCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import Spinner from "@/components/Spinner"
-import { Add, KeyboardArrowLeft, KeyboardArrowRight, Logout } from "@mui/icons-material"
+import { Add, KeyboardArrowLeft, KeyboardArrowRight, Logout, Search } from "@mui/icons-material"
 import { url } from "@/libs/url"
 import Skeleton from "@/components/Skeleton"
 import BlogCard from "@/components/editor/BlogCard"
-import Link from "next/link"
 import NewModal from "@/components/editor/NewModal"
 import toast from "react-hot-toast"
-import { langs } from "@/components/editor/codeblocklang"
 
 const Page = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -34,6 +32,7 @@ const Page = () => {
     const [showModal, setShowModal] = useState(false)
     const [arrowDisabled, setArrowDisabled] = useState(false)
     const [showSkeleton, setShowSkeleton] = useState(false)
+    const [searchQuery, setSearchQuery] = useState("")
 
     const router = useRouter()
 
@@ -58,7 +57,8 @@ const Page = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 token: getCookie("token"),
-                page: currentPage
+                page: currentPage,
+                searchQuery: searchQuery
             })
         })
         .then(async (e) => {
@@ -130,10 +130,38 @@ const Page = () => {
             </div>
             :
             <>
-            <div className="w-full md:h-full pt-24 pb-16 md:pt-32 md:pb-24">
-                <div className="flex w-full h-full justify-center">
-                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 gap-4 w-full max-w-screen-lg px-8 md:px-14">
-                        { (blogsData && !showSkeleton ) ?
+            <div className="w-full md:h-full pt-20 md:pt-24 pb-16 md:pb-24">
+                <div className="flex flex-col w-full h-full items-center gap-6 md:gap-8">
+                    <form 
+                        className="w-full gap-2 flex max-w-screen-sm px-8 md:px-14"
+                        onSubmit={(e) => {
+                            e.preventDefault()
+                            setShowSkeleton(true)
+                            getBlogs()
+                        }}
+                    >
+                        <input
+                            className="py-2 px-4 bg-gray-100 border border-gray-200 w-full rounded-md outline-none text-gray-600 drop-shadow-sm hover:bg-gray-200 focus:bg-gray-200"
+                            type="text"
+                            placeholder="Search..."
+                            style={{
+                                transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+                            }}
+                            value={searchQuery}
+                            onChange={(e)=>setSearchQuery(e.target.value)}
+                            
+                        />
+                        <button 
+                            className="p-2 bg-gray-100 border border-gray-200 w-fit rounded-md outline-none text-gray-600 hover:bg-gray-200 drop-shadow-sm"
+                            style={{
+                                transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+                            }}
+                        >
+                            <Search/>
+                        </button>
+                    </form>
+                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 gap-4 w-full max-w-screen-lg px-8 md:px-14 h-full">
+                        { (blogsData && !showSkeleton) ?
                             blogsData?.map((b, n)=>{
                                 return (
                                     <BlogCard
@@ -149,7 +177,7 @@ const Page = () => {
                         :
                             [...Array(6)].map((_, n)=>{
                                 return (
-                                    <Skeleton width="full" height="full" key={n}/>
+                                    <Skeleton width="full" height="full" key={n} className="bg-gray-200"/>
                                 )
                             })
                         }
@@ -194,7 +222,7 @@ const Page = () => {
             </button>
             <div className="flex gap-2 p-2 rounded-md bg-white border border-gray-200 text-gray-600 hover:cursor-default">
                 <h1 className="text-nowrap">Page</h1>
-                <h1 className="text-nowrap">{currentPage} / {Math.ceil(((blogCount ?? 1) + 1) / 6)}</h1>
+                <h1 className="text-nowrap">{currentPage} / {Math.ceil(Math.max(blogCount ?? 1, 1) / 6)}</h1>
             </div>
             <button
                 className="p-2 bg-white border border-gray-200 text-gray-600 rounded-md hover:bg-gray-100 disabled:hover:cursor-not-allowed"
@@ -202,13 +230,13 @@ const Page = () => {
                     transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
                 }}
                 onClick={() => {
-                    if (currentPage < Math.ceil(((blogCount ?? 1) + 1) / 6)) {
+                    if (currentPage < Math.ceil(((blogCount ?? 1)) / 6)) {
                         setCurrentPage(currentPage + 1)
                         setArrowDisabled(true)
                         setShowSkeleton(true)
                     }
                 }}
-                disabled={arrowDisabled || currentPage >= Math.ceil(((blogCount ?? 1) + 1) / 6)}
+                disabled={arrowDisabled || currentPage >= Math.ceil((blogCount ?? 1) / 6)}
             >
                 <KeyboardArrowRight/>
             </button>

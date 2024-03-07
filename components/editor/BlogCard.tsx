@@ -11,7 +11,7 @@ const BlogCard: FC<{
     return (
         <Link 
             href={`/editor/blog?q=${props.id}`} 
-            className="group p-6 rounded-lg border bg-white hover:bg-gray-100 drop-shadow-sm"
+            className="group p-6 rounded-lg border bg-white hover:bg-gray-200 drop-shadow-sm"
             style={{
                 transition: "background-color 100ms cubic-bezier(0.37, 0, 0.63, 1)"
             }}
