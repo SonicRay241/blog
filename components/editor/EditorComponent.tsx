@@ -13,7 +13,6 @@ import {
   tablePlugin,
   imagePlugin,
   linkPlugin,
-  sandpackPlugin,
   frontmatterPlugin,
   diffSourcePlugin,
   toolbarPlugin,
@@ -21,16 +20,17 @@ import {
   BoldItalicUnderlineToggles,
   CodeToggle,
   CreateLink,
-  DiffSourceToggleWrapper,
   InsertCodeBlock,
-  useCodeBlockEditorContext,
-  type CodeBlockEditorDescriptor
+  type CodeBlockEditorDescriptor,
+  CodeMirrorEditor,
+  InsertImage,
+  InsertTable,
 } from "@mdxeditor/editor"
 import {FC} from 'react'
 import { langs } from "./codeblocklang"
-import { TextareaAutosize } from "@mui/material"
-
-
+import { encode } from "base64-arraybuffer"
+import { url } from "@/libs/url"
+import { getCookie } from "cookies-next"
 
 const atomDark = {
   "colors": {
@@ -72,21 +72,15 @@ interface EditorProps {
   editorRef?: React.MutableRefObject<MDXEditorMethods | null>
 }
 
+
+
 const PlainTextCodeEditorDescriptor: CodeBlockEditorDescriptor = {
   // always use the editor, no matter the language or the meta of the code block
   match: (language, meta) => true,
   // You can have multiple editors with different priorities, so that there's a "catch-all" editor (with the lowest priority)
   priority: 0,
   // The Editor is a React component
-  Editor: (props) => {
-    const cb = useCodeBlockEditorContext()
-   // stops the proppagation so that the parent lexical editor does not handle certain events.
-    return (
-      <div onKeyDown={(e) => e.nativeEvent.stopImmediatePropagation()}>
-        <TextareaAutosize className="w-full resize-none outline-none" defaultValue={props.code} onChange={(e) => cb.setCode(e.target.value)} />
-      </div>
-    )
-  }
+  Editor: CodeMirrorEditor
 }
 
 
@@ -94,11 +88,20 @@ const PlainTextCodeEditorDescriptor: CodeBlockEditorDescriptor = {
  * Extend this Component further with the necessary plugins or props you need.
  * proxying the ref is necessary. Next.js dynamically imported components don't support refs. 
 */
-const Editor: FC<EditorProps> = ({ markdown, editorRef }) => {
+const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?: (b: boolean) => void, readOnly?: boolean }> = (props) => {
   return (
     <MDXEditor 
-      ref={editorRef}
-      markdown={markdown}
+      ref={props.editorRef}
+      markdown={props.markdown}
+      onChange={(s) => {
+        if (props.setState)
+        props.setState(s)
+        if (props.enableSaveBtn)
+        props.enableSaveBtn(true)
+      }}
+      suppressHtmlProcessing={false}
+      placeholder="Type markdown here..."
+      readOnly={props.readOnly}
       plugins={[
         headingsPlugin(),
         listsPlugin(),
@@ -111,24 +114,49 @@ const Editor: FC<EditorProps> = ({ markdown, editorRef }) => {
           theme: atomDark
         }),
         tablePlugin(),
-        imagePlugin(),
+        imagePlugin({
+          imageUploadHandler: async (image) => {
+            const imageBuffer = await image.arrayBuffer()
+            const b64 = encode(imageBuffer)
+            // const res = fetch(`${url}/v1/image/upload/`, {
+            //   method: "POST",
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify({
+            //     token: getCookie("token"),
+            //     imageB64: b64
+            //   })
+            // })
+            // .then(async (e) => {
+            //   const res = await e.text()
+            //   return res
+            // })
+            // .catch((e) => {
+            //   return "https://alcnfiswewhrojhwglgi.supabase.co/storage/v1/object/public/images/ERROR.gif?t=2024-03-07T08%3A37%3A06.114Z"
+            // })
+
+            const res = "data:image/png;base64, " + b64
+            return new Promise<string>((resolve, reject) => {
+                resolve(res);
+            })
+          },
+        }),
         linkPlugin(),
         frontmatterPlugin(),
         diffSourcePlugin(),
         markdownShortcutPlugin(),
-        // toolbarPlugin({
-        //   toolbarContents: () => (
-        //     <>
-        //       {' '}
-        //       <UndoRedo />
-        //       <BoldItalicUnderlineToggles />
-        //       <CreateLink/>
-        //       <CodeToggle/>
-        //       <InsertCodeBlock/>
-              
-        //     </>
-        //   )
-        // })
+        toolbarPlugin({
+          toolbarContents: () => (
+            <div className="flex-wrap fixed bottom-2 left-1/2 -translate-x-1/2 flex justify-center p-1 h-fit bg-gray-100 border border-gray-200 drop-shadow-sm rounded-md">
+              <UndoRedo />
+              <BoldItalicUnderlineToggles />
+              <CreateLink/>
+              <CodeToggle/>
+              <InsertCodeBlock/>
+              <InsertImage/>
+              <InsertTable/>
+            </div>
+          )
+        })
       ]}
     />
   )

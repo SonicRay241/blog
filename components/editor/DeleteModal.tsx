@@ -71,7 +71,7 @@ const DeleteModal: FC<{
             }}
             onClick={deleteBlog}
           >
-            {buttonDisabled ? <Spinner className="h-6 w-6 fill-red-600"/> : "Delete"}
+            {buttonDisabled ? <Spinner className="h-6 w-6 fill-red-600" delete/> : "Delete"}
           </button>
         </div>
       </div>

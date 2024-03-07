@@ -13,6 +13,7 @@ import Link from "next/link"
 import NavBar from "@/components/Navbar"
 import { url } from "@/libs/url";
 import { useSearchParams } from "next/navigation"
+import EditorComp from "@/components/editor/EditorComponent"
 
 const Blog = () => {
     return (
@@ -73,6 +74,7 @@ const BlogPost = () => {
                                 <Markdown 
                                     rehypePlugins={[rehypeRaw]}
                                     remarkPlugins={[remarkGfm]}
+                                    urlTransform={(value: string) => value}
                                     components={{
                                         code({ node, inline, className, children, ...props }: any) {
                                             const match = /language-(\w+)/.exec(className || '');

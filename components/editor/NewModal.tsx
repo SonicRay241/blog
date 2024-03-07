@@ -5,6 +5,8 @@ import { url } from "@/libs/url"
 import { getCookie } from "cookies-next"
 import toast from "react-hot-toast"
 import Spinner from "@/components/Spinner"
+import { useRouter } from "next/navigation"
+import { TextareaAutosize } from "@mui/material"
 
 const NewModal: FC<{
   show: boolean,
@@ -13,6 +15,8 @@ const NewModal: FC<{
 }> = (props) => {
   const [titleValue, setTitleValue] = useState("")
   const [buttonDisabled, setButtonDisabled] = useState(false)
+
+  const router = useRouter()
   // const [loaded, setLoaded] = useState(false)
 
   // useEffect(()=>{
@@ -40,6 +44,7 @@ const NewModal: FC<{
         toast.success(`${titleValue} created!`)
         props.cancelCallback()
         props.reloadCallback()
+        router.push(`/editor/blog?q=${[...(titleValue.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
         setTitleValue("")
       }
       else toast.error(res)
@@ -66,11 +71,10 @@ const NewModal: FC<{
         onClick={(e)=>e.stopPropagation()}
       >
         <label htmlFor="title" className="text-2xl font-semibold text-violet-600">Blog Title</label>
-        <input 
-          type="text" 
+        <TextareaAutosize
           value={titleValue} 
           onChange={e => setTitleValue(e.target.value)}
-          className="w-full focus:outline-violet-600 p-2 rounded-md border border-gray-300" 
+          className="w-full focus:outline-violet-600 p-2 rounded-md border border-gray-300 resize-none" 
           placeholder="New Blog"
         />
         <div className="flex gap-4">
