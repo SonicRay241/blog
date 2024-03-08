@@ -160,7 +160,7 @@ const Page = () => {
                             <Search/>
                         </button>
                     </form>
-                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 gap-4 w-full max-w-screen-lg px-8 md:px-14 h-full pb-32 md:pb-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-3 gap-4 w-full max-w-screen-lg px-8 md:px-14 pb-32 md:pb-0">
                         { (blogsData && !showSkeleton) ?
                             blogsData?.map((b, n)=>{
                                 return (
