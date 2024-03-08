@@ -11,15 +11,11 @@ const Footer = () => {
     const contacts: { title: string, url: string }[] = [
         {
             title: "Github",
-            url: "https://github.com/SonicRay241"
+            url: "https://github.com/SonicRay241/blog"
         },
         {
-            title: "LinkedIn",
-            url: "https://www.linkedin.com/in/rayhan-permana-733129292/"
-        },
-        {
-            title: "Instagram",
-            url: "https://www.instagram.com/rayy.dev?igsh=cDFyaTg5Nmd3cDVv"
+            title: "Portfolio",
+            url: "https://rayy.dev"
         }
     ]
 
