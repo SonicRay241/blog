@@ -1,12 +1,12 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState, useCallback, Suspense, useRef } from "react"
+import { useEffect, useState, useCallback, Suspense } from "react"
 import { url } from "@/libs/url"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import { getCookie, deleteCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
-import { DeleteOutline, KeyboardArrowLeft, Logout, Save } from "@mui/icons-material"
+import { Archive, ArchiveOutlined, DeleteOutline, KeyboardArrowLeft, Logout, Publish, Save } from "@mui/icons-material"
 import Link from "next/link"
 import Spinner from "@/components/Spinner"
 import DeleteModal from "@/components/editor/DeleteModal"
@@ -14,7 +14,6 @@ import { TextareaAutosize } from "@mui/material"
 // import '@mdxeditor/editor/style.css'
 import EditorComp from "@/components/editor/EditorComponent"
 import toast from "react-hot-toast"
-import { BoldItalicUnderlineToggles, CodeToggle, CreateLink, UndoRedo } from "@mdxeditor/editor"
 
 const Editor = () => {
   const [accountData, setAccountData] = useState<{
@@ -39,6 +38,7 @@ const Editor = () => {
 
   const [editorContent, setEditorContent] = useState("")
   const [saveBtn, setSaveBtn] = useState(false)
+  const [publishBtn, setPublishBtn] = useState(false)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -65,7 +65,8 @@ const Editor = () => {
       } else {
         toast.error(res)
       }
-    }).catch(() => toast.error("Something went wrong..."))
+    })
+    .catch(() => toast.error("Something went wrong..."))
   }
 
   const getBlogMd = () => {
@@ -76,6 +77,7 @@ const Editor = () => {
         setInitialBlogData(data)
         setBlogTitle(`${data.title}`)
         setEditorContent(`${data.content}`)
+        setPublishBtn(data.hidden)
 
         setIsLoading(false)
       })
@@ -98,6 +100,48 @@ const Editor = () => {
     deleteCookie("token")
     router.replace("/editor/login")
   }, [router])
+
+  const publish = () => {
+    fetch(`${url}/v1/editor/publish/`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: getCookie("token"),
+        blogId: blog
+      })
+    })
+    .then(async (e) => {
+      const res = await e.text()
+      if (res == "SUCCESS") {
+        toast.success("Published blog!")
+        setPublishBtn(false)
+      } else {
+        toast.error(res)
+      }
+    })
+    .catch(() => toast.error("Something went wrong..."))
+  }
+
+  const archive = () => {
+    fetch(`${url}/v1/editor/archive/`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: getCookie("token"),
+        blogId: blog
+      })
+    })
+    .then(async (e) => {
+      const res = await e.text()
+      if (res == "SUCCESS") {
+        toast.success("Archived blog!")
+        setPublishBtn(true)
+      } else {
+        toast.error(res)
+      }
+    })
+    .catch(() => toast.error("Something went wrong..."))
+  }
 
   useEffect(()=>{
     const getAccountData = () => {
@@ -162,13 +206,17 @@ const Editor = () => {
           <KeyboardArrowLeft/>
         </Link>
         <button 
-          className="fixed z-40 p-2 bottom-2 left-2 rounded-md hover:bg-red-500 hover:text-white text-red-500 backdrop-blur-sm bg-white/60" 
-          onClick={logout}
+          className={`fixed z-40 p-2 bottom-2 left-2 rounded-md ${ publishBtn ? "text-green-500 hover:bg-green-500" : "text-red-500 hover:bg-red-500"} hover:text-white  backdrop-blur-sm bg-white/60` }
+          onClick={publishBtn ? publish : archive}
           style={{
             transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
           }}
         >
-          <Logout/>
+          { publishBtn ?
+              <Publish/>
+            :
+              <ArchiveOutlined/>
+          }
         </button>
         <button 
           className="fixed z-40 p-2 bottom-2 right-2 rounded-md hover:bg-red-500 hover:text-white text-red-500 backdrop-blur-sm bg-white/60" 
@@ -210,9 +258,7 @@ const Editor = () => {
             <div className="">
               <p className="px-4 text-neutral-500 m-0 p-0 leading-none text-sm sm:text-base md:text-lg mb-4">{initialBlogData?.created_at.split("T")[0].split("-").reverse().join(".")} | {initialBlogData?.writer}</p>
             <Suspense>
-              <div className="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar text-neutral-900 prose-headings:font-semibold pb-96">
-                <EditorComp markdown={editorContent} setState={setEditorContent} enableSaveBtn={setSaveBtn}/>
-              </div>
+              <EditorComp markdown={editorContent} setState={setEditorContent} enableSaveBtn={setSaveBtn}/>
             </Suspense>
             </div>
           </div>

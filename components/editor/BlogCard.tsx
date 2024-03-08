@@ -27,7 +27,7 @@ const BlogCard: FC<{
                 <p
                     className={`font-medium ${props.hidden ? "text-red-500" : "text-emerald-500"} text-xs mt-6`}
                 >
-                    {props.hidden ? "Archived" : "Public"}
+                    {props.hidden ? "Archived" : "Published"}
                 </p>
                 </div>
             </div>

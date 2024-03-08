@@ -13,7 +13,6 @@ import Link from "next/link"
 import NavBar from "@/components/Navbar"
 import { url } from "@/libs/url";
 import { useSearchParams } from "next/navigation"
-import EditorComp from "@/components/editor/EditorComponent"
 import Footer from "@/components/Footer"
 
 const Blog = () => {
@@ -56,7 +55,7 @@ const BlogPost = () => {
     return (
         <>
             <NavBar/>
-            <div className="w-full flex flex-col items-center pb-64">
+            <div className="w-full flex flex-col items-center pb-20">
                 {
                     blogData &&
                     blogData.hidden &&
@@ -68,7 +67,7 @@ const BlogPost = () => {
                     <div className="flex w-full justify-center pt-12">
                         {
                             blogData ?
-                            <div className="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-pre:no-scrollbar prose-code:no-scrollbar">
+                            <div className="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-img:border prose-img:border-gray-200 prose-pre:no-scrollbar prose-code:no-scrollbar">
                                 <h1 className="text-4xl sm:text-5xl md:text-6xl text-violet-600 mb-4 md:mb-8 p-0 leading-none">{blogData.title}</h1>
                                 <p className="text-neutral-500 m-0 p-0 leading-none text-sm sm:text-base md:text-lg">{blogData.created_at.split("T")[0].split("-").reverse().join(".")} | {blogData.writer}</p>
                                 <br />
@@ -112,7 +111,7 @@ const BlogPost = () => {
                                                     {children}
                                                 </a>
                                             )
-                                        }
+                                        },
                                     }}
                                 >
                                     {blogData.content}

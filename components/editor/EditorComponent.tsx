@@ -21,17 +21,16 @@ import {
   CodeToggle,
   CreateLink,
   InsertCodeBlock,
-  type CodeBlockEditorDescriptor,
   CodeMirrorEditor,
   InsertImage,
   InsertTable,
   linkDialogPlugin,
+  type CodeBlockEditorDescriptor,
+  type ImageUploadHandler
 } from "@mdxeditor/editor"
-import {FC} from 'react'
+import { FC } from 'react'
 import { langs } from "./codeblocklang"
 import { encode } from "base64-arraybuffer"
-import { url } from "@/libs/url"
-import { getCookie } from "cookies-next"
 
 const atomDark = {
   "colors": {
@@ -68,14 +67,13 @@ const atomDark = {
   }
 }
 
-interface EditorProps {
+type EditorProps = {
   markdown: string
   editorRef?: React.MutableRefObject<MDXEditorMethods | null>
+  readOnly?: boolean
 }
 
-
-
-const PlainTextCodeEditorDescriptor: CodeBlockEditorDescriptor = {
+const FallbackCodeEditorDescriptor: CodeBlockEditorDescriptor = {
   // always use the editor, no matter the language or the meta of the code block
   match: (language, meta) => true,
   // You can have multiple editors with different priorities, so that there's a "catch-all" editor (with the lowest priority)
@@ -84,12 +82,20 @@ const PlainTextCodeEditorDescriptor: CodeBlockEditorDescriptor = {
   Editor: CodeMirrorEditor
 }
 
+const imageHandler: ImageUploadHandler = async (image) => {
+  const imageBuffer = await image.arrayBuffer()
+  const b64 = encode(imageBuffer)
+  const output = "data:image/png;base64, " + b64
+  return new Promise<string>((resolve, reject) => {
+    resolve(output);
+  })
+}
 
 /**
  * Extend this Component further with the necessary plugins or props you need.
  * proxying the ref is necessary. Next.js dynamically imported components don't support refs. 
 */
-const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?: (b: boolean) => void, readOnly?: boolean }> = (props) => {
+const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?: (b: boolean) => void }> = (props) => {
   return (
     <MDXEditor 
       ref={props.editorRef}
@@ -103,6 +109,7 @@ const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?:
       suppressHtmlProcessing={false}
       placeholder="Type markdown here..."
       readOnly={props.readOnly}
+      contentEditableClassName="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-img:border prose-img:border-gray-200 prose-pre:no-scrollbar prose-code:no-scrollbar pb-96"
       plugins={[
         headingsPlugin({ allowedHeadingLevels: [1, 2, 3, 4, 5, 6] }),
         listsPlugin(),
@@ -110,22 +117,13 @@ const Editor: FC<EditorProps & { setState?: (s: string) => void, enableSaveBtn?:
         thematicBreakPlugin(),
         linkPlugin(),
         linkDialogPlugin(),
-        codeBlockPlugin({ defaultCodeBlockLanguage: 'js', codeBlockEditorDescriptors: [PlainTextCodeEditorDescriptor]}),
+        codeBlockPlugin({ defaultCodeBlockLanguage: 'js', codeBlockEditorDescriptors: [FallbackCodeEditorDescriptor]}),
         codeMirrorPlugin({
           codeBlockLanguages: langs,
           theme: atomDark
         }),
         tablePlugin(),
-        imagePlugin({
-          imageUploadHandler: async (image) => {
-            const imageBuffer = await image.arrayBuffer()
-            const b64 = encode(imageBuffer)
-            const res = "data:image/png;base64, " + b64
-            return new Promise<string>((resolve, reject) => {
-                resolve(res);
-            })
-          },
-        }),
+        imagePlugin({ imageUploadHandler: imageHandler }),
         frontmatterPlugin(),
         diffSourcePlugin(),
         markdownShortcutPlugin(),

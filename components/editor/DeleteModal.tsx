@@ -51,7 +51,7 @@ const DeleteModal: FC<{
         className={`${props.show ? "scale-100 opacity-100" : "scale-50 opacity-0"} w-full max-w-sm flex flex-col p-6 bg-white rounded-md border border-gray-200 gap-4 transition-all`}
         onClick={(e)=>e.stopPropagation()}
       >
-        <h1 className="text-2xl font-semibold text-red-600">Delete Blog</h1>
+        <h1 className="text-2xl font-semibold text-red-500">Delete Blog</h1>
         <p className="text-base text-gray-600">Are you sure you want to delete this blog?</p>
         <div className="flex gap-4">
           <button 
@@ -65,13 +65,13 @@ const DeleteModal: FC<{
             Cancel
           </button>
           <button 
-            className="flex justify-center py-2 px-4 border border-white bg-red-600 hover:bg-red-500 disabled:hover:bg-red-600 disabled:cursor-not-allowed text-white rounded-md w-full"
+            className="flex justify-center py-2 px-4 border border-white bg-red-500 hover:bg-red-600 disabled:hover:bg-red-500 disabled:cursor-not-allowed text-white rounded-md w-full"
             style={{
               transition: "background-color 100ms cubic-bezier(0.37, 0, 0.63, 1)"
             }}
             onClick={deleteBlog}
           >
-            {buttonDisabled ? <Spinner className="h-6 w-6 fill-red-600" delete/> : "Delete"}
+            {buttonDisabled ? <Spinner className="h-6 w-6 fill-red-500" delete/> : "Delete"}
           </button>
         </div>
       </div>

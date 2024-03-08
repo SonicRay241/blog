@@ -28,11 +28,7 @@ const Footer = () => {
             <div 
                 className=""
             >     
-                <h1 
-                    className="text-4xl mb-3 w-fit h-fit font-medium"
-                >
-                    <span className="text-violet-600">/</span>RAYHAN PERMANA
-                </h1>
+                <h1 className="text-5xl font-semibold w-fit h-fit text-center mb-3">rayy<span className="text-violet-600">.dev</span><span className="text-2xl text-gray-400">/blogs</span></h1>
             </div>
             <div className="flex flex-col md:flex-row gap-8 md:gap-0">
                 <div className="w-full">
