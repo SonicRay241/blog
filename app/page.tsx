@@ -20,14 +20,12 @@ const Page = () => {
 
   useEffect(()=>{
     if (!isLoaded)
-    fetch(`${url}/v1/blogs/?page=1`)
+    fetch(`${url}/v1/blogs/latest`)
         .then((res) => res.json())
         .then((data) => {
-            // setPageBlogs(data.data)
             setBlogCount(+data.count)
-            setLatestBlogs(data.data.length >= 5 ? data.data.slice(5) : data.data)
+            setLatestBlogs(data.data)
             setIsLoaded(true)
-            console.log("we")
         })
         .catch(()=>{
             setIsError(true)
