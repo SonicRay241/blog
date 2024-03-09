@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import { url } from "@/libs/url";
 
 const Page = () => {
-  const [blogCount, setBlogCount] = useState<number | null>(null)
   const [latestBlogs, setLatestBlogs] = useState<{
     created_at: string;
     id: string;
@@ -21,15 +20,15 @@ const Page = () => {
   useEffect(()=>{
     if (!isLoaded)
     fetch(`${url}/v1/blogs/latest`)
-        .then((res) => res.json())
-        .then((data) => {
-            setBlogCount(+data.count)
-            setLatestBlogs(data.data)
-            setIsLoaded(true)
-        })
-        .catch(()=>{
-            setIsError(true)
-        })
+      .then(async (res) => {
+        const data = await res.json()
+        setLatestBlogs(data)
+        setIsLoaded(true)
+      })
+      .catch((e) => {
+        console.log(e)
+        setIsError(true)
+      })
   }, [])
   
   if (!isError)
@@ -46,11 +45,11 @@ const Page = () => {
             </h1>
             <p className="mt-10 text-center text-gray-500">Unleashing creativity in the world of technology and igniting innovation in the digital realm.</p>
           </div>
-          {(blogCount == null || blogCount > 0) ?
+          {(latestBlogs != null && latestBlogs.length > 0) ?
           <>
           <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-40">
-            {(latestBlogs && blogCount) ? 
+            {(latestBlogs) ? 
               latestBlogs.map((blogData, n)=>{
                 return (
                   <Link 
