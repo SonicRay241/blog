@@ -46,7 +46,7 @@ const Page = () => {
               Where logic meets creativity: <br />
               Unraveling the mysteries of code and technology.
             </h1>
-            <p className="mt-10 text-center text-gray-500">Inspiring creativity, overcoming programming obstacles, and innovating on technology.</p>
+            <p className="mt-10 text-center text-gray-500">Unleashing creativity in the world of technology and igniting innovation in the digital realm.</p>
           </div>
           {(blogCount == null || blogCount > 0) ?
           <>

@@ -45,6 +45,7 @@ const Editor = () => {
   const blog = searchParams.get("q")
 
   const saveContent = () => {
+    const saveToast = toast.loading("Saving...")
     console.log(blogTitle == initialBlogData?.title)
     fetch(`${url}/v1/editor/write/blog/`, {
       method: "POST",
@@ -59,14 +60,14 @@ const Editor = () => {
     .then(async (e) => {
       const res = await e.text()
       if (res == "SUCCESS") {
-        toast.success("Saved!")
+        toast.success("Saved!", { id: saveToast })
         setSaveBtn(false)
         if (blogTitle != initialBlogData?.title) router.replace(`/editor/blog?q=${[...(blogTitle.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
       } else {
-        toast.error(res)
+        toast.error(res, { id: saveToast })
       }
     })
-    .catch(() => toast.error("Something went wrong..."))
+    .catch(() => toast.error("Something went wrong...", { id: saveToast }))
   }
 
   const getBlogMd = () => {
@@ -102,6 +103,7 @@ const Editor = () => {
   }, [router])
 
   const publish = () => {
+    const publishToast = toast.loading("Publishing...")
     fetch(`${url}/v1/editor/publish/`, {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -113,16 +115,17 @@ const Editor = () => {
     .then(async (e) => {
       const res = await e.text()
       if (res == "SUCCESS") {
-        toast.success("Published blog!")
+        toast.success("Published blog!", { id: publishToast })
         setPublishBtn(false)
       } else {
-        toast.error(res)
+        toast.error(res, { id: publishToast })
       }
     })
-    .catch(() => toast.error("Something went wrong..."))
+    .catch(() => toast.error("Something went wrong...", { id: publishToast }))
   }
 
   const archive = () => {
+    const archiveToast = toast.loading("Archiving...")
     fetch(`${url}/v1/editor/archive/`, {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
@@ -134,13 +137,13 @@ const Editor = () => {
     .then(async (e) => {
       const res = await e.text()
       if (res == "SUCCESS") {
-        toast.success("Archived blog!")
+        toast.success("Archived blog!", { id: archiveToast })
         setPublishBtn(true)
       } else {
-        toast.error(res)
+        toast.error(res, { id: archiveToast })
       }
     })
-    .catch(() => toast.error("Something went wrong..."))
+    .catch(() => toast.error("Something went wrong...", { id: archiveToast }))
   }
 
   useEffect(()=>{
@@ -156,6 +159,9 @@ const Editor = () => {
           const res = JSON.parse(await e.text())
           setAccountData(res)
           getBlogMd()
+      })
+      .catch(() => {
+        setIsError(true)
       })
   }
 
