@@ -40,7 +40,7 @@ const BlogPost = () => {
 
     useEffect(()=>{
         if (!isLoaded)
-        fetch(`${url}/v1/blog/${blog}`)
+        fetch(`${url}/v1/blog/${blog}?cache=true`)
         .then((res) => res.json())
         .then((data) => {
             setBlogData(data)

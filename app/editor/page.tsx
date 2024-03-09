@@ -75,7 +75,9 @@ const Page = () => {
     }
 
     useEffect(()=>{
-        if (showSkeleton && arrowDisabled) getBlogs()
+        // if (showSkeleton && arrowDisabled) getBlogs()
+        console.log("e");
+        
         const getAccountData = () => {
             fetch(`${url}/v1/auth/session-user/`, {
                 method: "POST",
@@ -91,29 +93,30 @@ const Page = () => {
             getBlogs()
         }
 
-        if (isLoading)
-        if (getCookie("token")) {
-            fetch(`${url}/v1/auth/validate/`,{
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    token: getCookie("token")
+        if (accountData == null) {
+            if (getCookie("token")) {
+                fetch(`${url}/v1/auth/validate/`,{
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: getCookie("token")
+                    })
                 })
-            })
-            .then(async (e) => {
-                const valid = await e.text()
-                if (valid == "false") {
-                    toast.error("Invalid session, please log in again.")
-                    logout()
-                } else {
-                    getAccountData()
-                }
-            })
-            .catch(()=>{
-                setIsError(true)
-                setIsLoading(true)
-            })
-        } else router.replace("/editor/login")
+                .then(async (e) => {
+                    const valid = await e.text()
+                    if (valid == "false") {
+                        toast.error("Invalid session, please log in again.")
+                        logout()
+                    } else {
+                        getAccountData()
+                    }
+                })
+                .catch(() => {
+                    setIsError(true)
+                    setIsLoading(true)
+                })
+            } else router.replace("/editor/login")
+        }
     }, [logout, router, getBlogs])
 
     return (

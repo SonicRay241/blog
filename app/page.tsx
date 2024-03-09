@@ -13,11 +13,13 @@ const Page = () => {
     id: string;
     title: string;
     writer: string;
-  }[] | null>(null)
+  }[]>([])
   const [isError, setIsError] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(()=>{
+    console.log("lmoa");
+    
     if (!isLoaded)
     fetch(`${url}/v1/blogs/latest`)
       .then(async (res) => {
@@ -45,11 +47,11 @@ const Page = () => {
             </h1>
             <p className="mt-10 text-center text-gray-500">Unleashing creativity in the world of technology and igniting innovation in the digital realm.</p>
           </div>
-          {(latestBlogs != null && latestBlogs.length > 0) ?
+          {(latestBlogs.length > 0 || !isLoaded) ?
           <>
           <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-40">
-            {(latestBlogs) ? 
+            {(isLoaded) ? 
               latestBlogs.map((blogData, n)=>{
                 return (
                   <Link 

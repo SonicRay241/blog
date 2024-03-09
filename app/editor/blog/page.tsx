@@ -71,15 +71,16 @@ const Editor = () => {
   }
 
   const getBlogMd = () => {
+    console.log("getting markdown...");
+    
     if (!isError)
-    fetch(`${url}/v1/blog/${blog}`)
+    fetch(`${url}/v1/blog/${blog}?cache=false`)
       .then((res) => res.json())
       .then((data) => {        
         setInitialBlogData(data)
         setBlogTitle(`${data.title}`)
         setEditorContent(`${data.content}`)
         setPublishBtn(data.hidden)
-
         setIsLoading(false)
       })
       .catch((e)=>{
@@ -148,6 +149,8 @@ const Editor = () => {
 
   useEffect(()=>{
     const getAccountData = () => {
+      console.log("Getting account data...");
+      
       fetch(`${url}/v1/auth/session-user/`, {
           method: "POST",
           headers: { 'Content-Type': 'application/json' },
@@ -165,27 +168,30 @@ const Editor = () => {
       })
   }
 
-  if (isLoading)
-  if (getCookie("token")) {
-      fetch(`${url}/v1/auth/validate/`,{
-          method: "POST",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              token: getCookie("token")
-          })
-      })
-      .then(async (e) => {
-          const valid = await e.text()
-          if (valid == "false") {
-              logout()
-          } else {
-              getAccountData()
-          }
-      })
-      .catch(()=>{
-          setIsError(true)
-      })
-  } else router.replace("/editor/login")
+  if (accountData == null) {
+    console.log("Getting auth...");
+    
+    if (getCookie("token")) {
+        fetch(`${url}/v1/auth/validate/`,{
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                token: getCookie("token")
+            })
+        })
+        .then(async (e) => {
+            const valid = await e.text()
+            if (valid == "false") {
+                logout()
+            } else {
+                getAccountData()
+            }
+        })
+        .catch(()=>{
+            setIsError(true)
+        })
+    } else router.replace("/editor/login")
+  }
   })
 
   return (
