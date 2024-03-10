@@ -111,7 +111,7 @@ const BlogPost = () => {
                             blogMetadata ?
                             <div className="prose prose-base md:prose-lg prose-pre:bg-transparent prose-code:bg-transparent prose-pre:p-0 max-w-none w-full prose-img:mx-auto prose-img:rounded-md prose-img:border prose-img:border-gray-200 prose-pre:no-scrollbar prose-code:no-scrollbar">
                                 <h1 className="text-4xl sm:text-5xl md:text-6xl text-violet-600 mb-4 md:mb-8 p-0 leading-none">{blogMetadata.title}</h1>
-                                <p className="text-neutral-500 m-0 p-0 leading-none text-sm sm:text-base md:text-lg">{blogMetadata.created_at.split("T")[0].split("-").reverse().join(".")} | {blogMetadata.writer}</p>
+                                <p className="text-neutral-500 m-0 mb-4 p-0 leading-none text-sm sm:text-base md:text-lg">{blogMetadata.created_at.split("T")[0].split("-").reverse().join(".")} | {blogMetadata.writer}</p>
                                 <div className="border-b border-gray-300"/>
                                 { blogContent ?
                                     <Markdown 
