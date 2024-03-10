@@ -14,6 +14,7 @@ import NavBar from "@/components/Navbar"
 import { url } from "@/libs/url";
 import { useSearchParams } from "next/navigation"
 import Footer from "@/components/Footer"
+import Image from "next/image"
 
 const Blog = () => {
     return (
@@ -110,6 +111,20 @@ const BlogPost = () => {
                                                 >
                                                     {children}
                                                 </a>
+                                            )
+                                        },
+                                        image({ node, inline, src, className, children, ...props }: any) {
+                                            return (
+                                                <Image
+                                                    className={className}
+                                                    style={{
+                                                        color: "#3b82f6"
+                                                    }}
+                                                    quality={100}
+                                                    {...props}
+                                                >
+                                                    {children}
+                                                </Image>
                                             )
                                         },
                                     }}

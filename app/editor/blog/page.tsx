@@ -51,7 +51,7 @@ const Editor = () => {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token: getCookie("token"),
+        token: getCookie("token") ?? "",
         content: editorContent,
         blogId: blog ?? "",
         newTitle: blogTitle
@@ -241,7 +241,7 @@ const Editor = () => {
         </button>
         <button 
           className={`disabled:invisible fixed z-40 p-2 top-[72px] right-2 rounded-md hover:bg-violet-600 hover:text-white text-violet-600 backdrop-blur-sm bg-white/60` }
-          onClick={() => saveContent()}
+          onClick={saveContent}
           style={{
             transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
           }}
