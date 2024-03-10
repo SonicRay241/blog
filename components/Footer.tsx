@@ -1,7 +1,5 @@
 "use client"
 
-import { FC } from "react"
-import { Property } from "csstype"
 import Image from "next/image"
 import NextIcon from "@/public/next.png"
 import ExternalUrl from "./ExternalUrl"
