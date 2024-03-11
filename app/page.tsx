@@ -1,37 +1,23 @@
 "use client"
 
-import { useEffect, useState } from "react";
 import NavBar from "@/components/Navbar";
 import Link from "next/link";
 import Skeleton from "@/components/Skeleton";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { url } from "@/libs/url";
+import dynamic from "next/dynamic";
+import useSWR from "swr";
+import { fetcherJSON } from "@/libs/fetchers";
+
+const Footer = dynamic(() => import("@/components/Footer"))
 
 const Page = () => {
-  const [latestBlogs, setLatestBlogs] = useState<{
+  const {data: latestBlogs, error: isError, isLoading} = useSWR<{
     created_at: string;
     id: string;
     title: string;
     writer: string;
-  }[]>([])
-  const [isError, setIsError] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  useEffect(()=>{
-    console.log("lmoa");
-    
-    if (!isLoaded)
-    fetch(`${url}/v1/blogs/latest`)
-      .then(async (res) => {
-        const data = await res.json()
-        setLatestBlogs(data)
-        setIsLoaded(true)
-      })
-      .catch((e) => {
-        console.log(e)
-        setIsError(true)
-      })
-  }, [])
+  }[]>(`${url}/v1/blogs/latest`, fetcherJSON)
   
   if (!isError)
   return (
@@ -47,11 +33,9 @@ const Page = () => {
             </h1>
             <p className="mt-10 text-center text-gray-500">Unleashing creativity in the world of technology and igniting innovation in the digital realm.</p>
           </div>
-          {(latestBlogs.length > 0 || !isLoaded) ?
-          <>
           <h1 className="mt-24 text-gray-500 font-medium">Latest Posts</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 w-full mt-4 gap-6 mb-40">
-            {(isLoaded) ? 
+            {(!isLoading && latestBlogs) ? 
               latestBlogs.map((blogData, n)=>{
                 return (
                   <Link 
@@ -80,14 +64,7 @@ const Page = () => {
                 )
               })
             }
-            
           </div>
-          </>
-          :
-          <div className="flex w-full justify-center items-center mt-24 mb-48">
-            <h1 className="text-xl text-gray-500">Blogs coming soon! :D</h1>
-          </div>
-          }
         </div>
       </div>
       <Footer/>

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import NextIcon from "@/public/next.png"
-import ExternalUrl from "./ExternalUrl"
+import ExternalUrl from "@/components/ExternalUrl"
 import Link from "next/link"
 
 const Footer = () => {

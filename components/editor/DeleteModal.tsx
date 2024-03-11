@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, FormEvent, useEffect, useState } from "react"
+import { FC, useState } from "react"
 import { url } from "@/libs/url"
 import { getCookie } from "cookies-next"
 import toast from "react-hot-toast"

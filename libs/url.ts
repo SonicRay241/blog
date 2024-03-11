@@ -3,4 +3,4 @@ const URLs = {
     prod: "https://blogapi.rayy.dev"
 }
 
-export const url = URLs.prod
+export const url = URLs.dev
