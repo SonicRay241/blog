@@ -117,29 +117,30 @@ const MDRenderer: FC<{ markdown: string }> = (props) => {
 
 const BlogPost = () => {
     const searchParams = useSearchParams()
-    const blog = searchParams.get("p")
+    const blogID = searchParams.get("p")
 
     const [showMD, setShowMD] = useState(false)
 
-    preload(`${url}/v1/blog/${blog}/metadata?cache=true`, fetcherJSON)
-    preload(`${url}/v1/blog/${blog}/content?cache=true`, fetcherJSON)
+    preload(`${url}/v1/blog/${blogID}/metadata?cache=true`, fetcherJSON)
+    preload(`${url}/v1/blog/${blogID}/content?cache=true`, fetcherJSON)
 
     const { data: metadata, error: metadataError } = useSWR<{
         created_at: string;
         title: string;
         writer: string | null;
         hidden: boolean;
-    }>(`${url}/v1/blog/${blog}/metadata?cache=true`, fetcherJSON)
+    }>(`${url}/v1/blog/${blogID}/metadata?cache=true`, fetcherJSON)
 
     const { data: contentData, error: contentError } = useSWR<{
         content: string
-    }>(`${url}/v1/blog/${blog}/content?cache=true`, fetcherJSON)
+    }>(`${url}/v1/blog/${blogID}/content?cache=true`, fetcherJSON)
 
     const isError = metadataError || contentError
 
     useEffect(() => {
         setShowMD(true)
-    }, [])
+        document.title = metadata ? metadata.title : "Blog"
+    }, [metadata])
 
     if (!isError)
     return (
