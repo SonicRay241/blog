@@ -122,7 +122,7 @@ const BlogPost = () => {
     const [showMD, setShowMD] = useState(false)
 
     preload(`${url}/v1/blog/${blogID}/metadata?cache=true`, fetcherJSON)
-    preload(`${url}/v1/blog/${blogID}/content?cache=true`, fetcherJSON)
+    // preload(`${url}/v1/blog/${blogID}/content?cache=true`, fetcherJSON)
 
     const { data: metadata, error: metadataError } = useSWR<{
         created_at: string;
@@ -140,6 +140,10 @@ const BlogPost = () => {
     useEffect(() => {
         setShowMD(true)
         document.title = metadata ? metadata.title : "Blog"
+        const description = document.getElementsByTagName("meta").namedItem("description")
+        if (description){
+            description.content = contentData ? contentData.content : ""
+        }
     }, [metadata])
 
     if (!isError)
