@@ -1,6 +1,6 @@
 const URLs = {
     dev: "http://localhost:3000",
-    prod: "https://blogapi.rayy.dev"
+    prod: "https://api.rayy.dev/blogs"
 }
 
 export const url = URLs.prod
