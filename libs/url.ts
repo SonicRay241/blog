@@ -1,6 +1,1 @@
-const URLs = {
-    dev: "http://localhost:3000/blogapi",
-    prod: "https://api.rayy.dev/blogapi"
-}
-
-export const url = URLs.prod
+export const url: string = process.env.API ?? "localhost:3000"
