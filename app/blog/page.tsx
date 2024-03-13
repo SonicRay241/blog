@@ -140,9 +140,12 @@ const BlogPost = () => {
     useEffect(() => {
         setShowMD(true)
         document.title = metadata ? metadata.title : "Blog"
-        const description = document.getElementsByTagName("meta").namedItem("description")
-        if (description){
-            description.content = contentData ? contentData.content : ""
+        const meta = document.getElementsByTagName("meta")
+        for (let i = 0; i < meta.length; i++) {
+            if (meta[i].name == "description") {
+                meta[i].content = contentData ? contentData.content : (metadata ? "A blog by " + metadata.writer : "Unraveling the mysteries of code and technology.")
+                break
+            }
         }
     }, [metadata])
 
