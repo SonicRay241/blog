@@ -76,8 +76,6 @@ const Page = () => {
 
     useEffect(()=>{
         // if (showSkeleton && arrowDisabled) getBlogs()
-        console.log("e");
-        
         const getAccountData = () => {
             fetch(`${url}/v1/auth/session-user/`, {
                 method: "POST",
@@ -87,13 +85,18 @@ const Page = () => {
                 })
             })
             .then(async (e) => {
+                console.log(e);
                 const res = JSON.parse(await e.text())
                 setAccountData(res)
+            })
+            .catch(async (e) => {
+                setIsError(true)
+                toast.error("Failed to get account data.")
             })
             getBlogs()
         }
 
-        if (accountData == null) {
+        if (accountData == null && !isError) {
             if (getCookie("token")) {
                 fetch(`${url}/v1/auth/validate/`,{
                     method: "POST",
