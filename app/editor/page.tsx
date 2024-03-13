@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { getCookie, setCookie, deleteCookie } from "cookies-next"
+import { getCookie, deleteCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import Spinner from "@/components/Spinner"
@@ -85,7 +85,6 @@ const Page = () => {
                 })
             })
             .then(async (e) => {
-                console.log(e);
                 const res = JSON.parse(await e.text())
                 setAccountData(res)
             })

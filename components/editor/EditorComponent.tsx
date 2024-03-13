@@ -31,6 +31,7 @@ import {
 import { FC } from 'react'
 import { langs } from "./codeblocklang"
 import { encode } from "base64-arraybuffer"
+import imageCompression from "browser-image-compression"
 
 const atomDark = {
   "colors": {
@@ -83,7 +84,13 @@ const FallbackCodeEditorDescriptor: CodeBlockEditorDescriptor = {
 }
 
 const imageHandler: ImageUploadHandler = async (image) => {
-  const imageBuffer = await image.arrayBuffer()
+  const compressOptions = {
+    maxSizeMB: 0.3,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  } as const
+  const compressedImage = await imageCompression(image, compressOptions)
+  const imageBuffer = await compressedImage.arrayBuffer()
   const b64 = encode(imageBuffer)
   const output = "data:image/png;base64, " + b64
   return new Promise<string>((resolve, reject) => {
