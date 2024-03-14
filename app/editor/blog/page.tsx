@@ -42,7 +42,7 @@ const Editor = () => {
 
   const searchParams = useSearchParams()
   const router = useRouter()
-  const blog = searchParams.get("q")
+  const blog = searchParams.get("p")
 
   const saveContent = () => {
     const saveToast = toast.loading("Saving...")

@@ -8,6 +8,7 @@ import { url } from "@/libs/url";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
 import { fetcherJSON } from "@/libs/fetchers";
+import BlogCard from "@/components/editor/BlogCard";
 
 const Footer = dynamic(() => import("@/components/Footer"))
 
@@ -38,23 +39,30 @@ const Page = () => {
             {(!isLoading && latestBlogs) ? 
               latestBlogs.map((blogData, n)=>{
                 return (
-                  <Link 
-                    href={`/blog?p=${blogData.id}`} 
-                    className="group p-6 rounded-lg border bg-white hover:bg-gray-200 drop-shadow-sm"
-                    key={n}
-                    style={{
-                      transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
-                    }}
-                  >
-                    <div className="flex flex-col h-fit w-full justify-between">
-                      <h1 className="font-medium text-black">{blogData.title}</h1>
-                      <p 
-                        className="font-medium text-gray-500 text-xs mt-6"
-                      >
-                        {blogData.created_at.split("T")[0].split("-").reverse().join(".")} | {blogData.writer}
-                      </p>
-                    </div>
-                  </Link>
+                  // <Link 
+                  //   href={`/blog?p=${blogData.id}`} 
+                  //   className="group p-6 rounded-lg border bg-white hover:bg-gray-200 drop-shadow-sm"
+                  //   key={n}
+                  //   style={{
+                  //     transition: "all 100ms cubic-bezier(0.37, 0, 0.63, 1)"
+                  //   }}
+                  // >
+                  //   <div className="flex flex-col h-fit w-full justify-between">
+                  //     <h1 className="font-medium text-black">{blogData.title}</h1>
+                  //     <p 
+                  //       className="font-medium text-gray-500 text-xs mt-6"
+                  //     >
+                  //       {blogData.created_at.split("T")[0].split("-").reverse().join(".")} | {blogData.writer}
+                  //     </p>
+                  //   </div>
+                  // </Link>
+                  <BlogCard
+                    key={blogData.id}
+                    id={blogData.id}
+                    created_at={blogData.created_at}
+                    title={blogData.title}
+                    writer={blogData.writer}
+                  />
                 )
               })
               :
