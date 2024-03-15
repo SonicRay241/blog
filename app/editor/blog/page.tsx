@@ -6,7 +6,7 @@ import { url } from "@/libs/url"
 import EditorNavBar from "@/components/editor/EditorNavbar"
 import { getCookie, deleteCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
-import { Archive, ArchiveOutlined, DeleteOutline, KeyboardArrowLeft, Publish, Save } from "@mui/icons-material"
+import { ArchiveOutlined, DeleteOutline, KeyboardArrowLeft, Publish, Save } from "@mui/icons-material"
 import Link from "next/link"
 import Spinner from "@/components/Spinner"
 import DeleteModal from "@/components/editor/DeleteModal"
@@ -92,7 +92,7 @@ const Editor = () => {
       })
     }
     else {
-      setTimeout(getBlogMd, 3000)
+      router.refresh()
     }
   }
 
