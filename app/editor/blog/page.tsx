@@ -70,16 +70,13 @@ const Editor = () => {
     .catch(() => toast.error("Something went wrong...", { id: saveToast }))
   }
 
-  const getBlogMd = useCallback(() => {
+  const getBlogMd = () => {
     console.log("getting markdown...");
     
     if (!isError)
     fetch(`${url}/v1/blog/${blog}?cache=false`)
     .then(async (res) => {
-      console.log(res);
-      
       const data = await res.json()
-      console.log(data);
       
       setInitialBlogData(data)
       setBlogTitle(`${data.title}`)
@@ -92,7 +89,7 @@ const Editor = () => {
       setIsError(true)
       setIsLoading(true)
     })
-  }, [blogTitle, editorContent, publishBtn, blog, isError])
+  }
 
   const logout = useCallback(() => {
     setIsLoading(true)
