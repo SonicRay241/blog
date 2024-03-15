@@ -86,6 +86,7 @@ const Editor = () => {
       setIsLoading(false)
     })
     .catch((e)=>{
+      console.log(e);
       setIsError(true)
       setIsLoading(true)
     })
