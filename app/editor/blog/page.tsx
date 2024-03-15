@@ -70,7 +70,7 @@ const Editor = () => {
     .catch(() => toast.error("Something went wrong...", { id: saveToast }))
   }
 
-  const getBlogMd = () => {
+  const getBlogMd = useCallback(() => {
     console.log("getting markdown...");
     
     if (!isError)
@@ -87,7 +87,7 @@ const Editor = () => {
         setIsError(true)
         setIsLoading(true)
       })
-  }
+  }, [blogTitle, editorContent, publishBtn, blog, isError])
 
   const logout = useCallback(() => {
     setIsLoading(true)
@@ -168,7 +168,7 @@ const Editor = () => {
       })
   }
 
-  if (accountData == null) {
+  if (accountData == null && !isError) {
     console.log("Getting auth...");
     
     if (getCookie("token")) {

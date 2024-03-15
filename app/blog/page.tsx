@@ -96,7 +96,7 @@ const MDRenderer: FC<{ markdown: string }> = (props) => {
                         </a>
                     )
                 },
-                image({ node, inline, src, className, children, ...props }: any) {
+                img({ node, inline, src, className, children, alt, ...props }: any) {
                     return (
                         <Image
                             className={className}
@@ -104,6 +104,7 @@ const MDRenderer: FC<{ markdown: string }> = (props) => {
                                 color: "#3b82f6"
                             }}
                             quality={100}
+                            alt={alt}
                             {...props}
                         >
                             {children}
