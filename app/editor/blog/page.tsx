@@ -74,9 +74,10 @@ const Editor = () => {
     console.log("getting markdown...");
     
     if (!isError)
-    fetch(`${url}/v1/blog/${blog}?cache=false`)
-      .then((res) => res.json())
-      .then((data) => {        
+    setTimeout(() => {
+      fetch(`${url}/v1/blog/${blog}?cache=false`)
+      .then(async (res) => {
+        const data = await res.json()
         setInitialBlogData(data)
         setBlogTitle(`${data.title}`)
         setEditorContent(`${data.content}`)
@@ -87,6 +88,7 @@ const Editor = () => {
         setIsError(true)
         setIsLoading(true)
       })
+    }, 2000)
   }, [blogTitle, editorContent, publishBtn, blog, isError])
 
   const logout = useCallback(() => {
