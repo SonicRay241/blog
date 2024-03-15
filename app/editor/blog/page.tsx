@@ -62,36 +62,32 @@ const Editor = () => {
       if (res == "SUCCESS") {
         toast.success("Saved!", { id: saveToast })
         setSaveBtn(false)
-        if (blogTitle != initialBlogData?.title) router.push(`/editor/blog?q=${[...(blogTitle.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
+        if (blogTitle != initialBlogData?.title) router.replace(`/editor/blog?q=${[...(blogTitle.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
+      } else {
+        toast.error(res, { id: saveToast })
       }
     })
     .catch(() => toast.error("Something went wrong...", { id: saveToast }))
   }
 
   const getBlogMd = () => {
-    console.log("getting markdown...");
+    console.log(`getting markdown for id ${blog}`);
     
-    if (blog) {
-      if (!isError)
-      fetch(`${url}/v1/blog/${blog}?cache=false`)
-      .then(async (res) => {
-        const data = await res.json()
-
-        setInitialBlogData(data)
-        setBlogTitle(`${data.title}`)
-        setEditorContent(`${data.content}`)
-        setPublishBtn(data.hidden)
-        setIsLoading(false)
-      })
-      .catch((e)=>{
-        console.log(e);
-        setIsError(true)
-        setIsLoading(true)
-      })
-    }
-    else {
-      router.refresh()
-    }
+    if (!isError)
+    fetch(`${url}/v1/blog/${blog}?cache=false`)
+    .then(async (res) => {
+      const data = await res.json()
+      setInitialBlogData(data)
+      setBlogTitle(`${data.title}`)
+      setEditorContent(`${data.content}`)
+      setPublishBtn(data.hidden)
+      setIsLoading(false)
+    })
+    .catch((e)=>{
+      console.log(e);
+      setIsError(true)
+      setIsLoading(true)
+    })
   }
 
   const logout = useCallback(() => {

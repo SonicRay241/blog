@@ -37,7 +37,7 @@ const NewModal: FC<{
         toast.success(`${titleValue} created!`)
         props.cancelCallback()
         props.reloadCallback()
-        router.push(`/editor/blog?q=${[...(titleValue.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
+        router.push(`/editor/blog?p=${[...(titleValue.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
         setTitleValue("")
       }
       else toast.error(res)
