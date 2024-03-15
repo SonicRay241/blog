@@ -62,9 +62,7 @@ const Editor = () => {
       if (res == "SUCCESS") {
         toast.success("Saved!", { id: saveToast })
         setSaveBtn(false)
-        if (blogTitle != initialBlogData?.title) router.replace(`/editor/blog?q=${[...(blogTitle.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
-      } else {
-        toast.error(res, { id: saveToast })
+        if (blogTitle != initialBlogData?.title) router.push(`/editor/blog?q=${[...(blogTitle.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
       }
     })
     .catch(() => toast.error("Something went wrong...", { id: saveToast }))
