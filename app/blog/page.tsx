@@ -95,22 +95,7 @@ const MDRenderer: FC<{ markdown: string }> = (props) => {
                             {children}
                         </a>
                     )
-                },
-                img({ node, inline, src, className, children, alt, ...props }: any) {
-                    return (
-                        <Image
-                            className={className}
-                            style={{
-                                color: "#3b82f6"
-                            }}
-                            quality={100}
-                            alt={alt}
-                            {...props}
-                        >
-                            {children}
-                        </Image>
-                    )
-                },
+                }
             }}
         >
             {props.markdown}
