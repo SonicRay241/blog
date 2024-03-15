@@ -17,13 +17,6 @@ const NewModal: FC<{
   const [buttonDisabled, setButtonDisabled] = useState(false)
 
   const router = useRouter()
-  // const [loaded, setLoaded] = useState(false)
-
-  // useEffect(()=>{
-  //   setTimeout(()=>{
-  //     setLoaded(true)
-  //   }, 250)
-  // })
 
   const submitNewBlog = (e: FormEvent) => {
     e.preventDefault()
@@ -44,7 +37,9 @@ const NewModal: FC<{
         toast.success(`${titleValue} created!`)
         props.cancelCallback()
         props.reloadCallback()
-        router.push(`/editor/blog?q=${[...(titleValue.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
+        setTimeout(() => {
+          router.push(`/editor/blog?q=${[...(titleValue.toLowerCase()).matchAll(/[a-zA-Z0-9]+/g)].join("-")}`)
+        }, 1000)
         setTitleValue("")
       }
       else toast.error(res)
