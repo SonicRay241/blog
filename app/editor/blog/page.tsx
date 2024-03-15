@@ -76,6 +76,8 @@ const Editor = () => {
     if (!isError)
     fetch(`${url}/v1/blog/${blog}?cache=false`)
     .then(async (res) => {
+      console.log(res);
+      
       const data = await res.json()
       console.log(data);
       
