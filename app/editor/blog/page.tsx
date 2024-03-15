@@ -73,22 +73,27 @@ const Editor = () => {
   const getBlogMd = () => {
     console.log("getting markdown...");
     
-    if (!isError)
-    fetch(`${url}/v1/blog/${blog}?cache=false`)
-    .then(async (res) => {
-      const data = await res.json()
-      
-      setInitialBlogData(data)
-      setBlogTitle(`${data.title}`)
-      setEditorContent(`${data.content}`)
-      setPublishBtn(data.hidden)
-      setIsLoading(false)
-    })
-    .catch((e)=>{
-      console.log(e);
-      setIsError(true)
-      setIsLoading(true)
-    })
+    if (blog) {
+      if (!isError)
+      fetch(`${url}/v1/blog/${blog}?cache=false`)
+      .then(async (res) => {
+        const data = await res.json()
+
+        setInitialBlogData(data)
+        setBlogTitle(`${data.title}`)
+        setEditorContent(`${data.content}`)
+        setPublishBtn(data.hidden)
+        setIsLoading(false)
+      })
+      .catch((e)=>{
+        console.log(e);
+        setIsError(true)
+        setIsLoading(true)
+      })
+    }
+    else {
+      setTimeout(getBlogMd, 3000)
+    }
   }
 
   const logout = useCallback(() => {
