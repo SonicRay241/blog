@@ -1,7 +1,7 @@
 "use client"
 
 import Spinner from "@/components/Spinner"
-import { getCookie, deleteCookie, setCookie } from "cookies-next"
+import { getCookie, setCookie } from "cookies-next"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState, useEffect } from "react"
 import EditorNavBar from "@/components/editor/EditorNavbar"
