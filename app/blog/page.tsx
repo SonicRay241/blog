@@ -1,7 +1,5 @@
 "use client"
 
-export const dynamic = "force-static"
-
 import { FC, Suspense, useEffect, useState } from "react"
 import Skeleton from "@/components/Skeleton"
 
@@ -12,17 +10,17 @@ import NavBar from "@/components/Navbar"
 import { url } from "@/libs/url";
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
-import dynamicImport from "next/dynamic";
+import dynamic from "next/dynamic";
 import useSWR, { preload } from "swr";
 import { fetcherJSON } from "@/libs/fetchers";
 
-const Footer = dynamicImport(() => import("@/components/Footer"))
+const Footer = dynamic(() => import("@/components/Footer"))
 
-const Markdown = dynamicImport(() => import("react-markdown"), {
+const Markdown = dynamic(() => import("react-markdown"), {
     ssr: false,
     loading: () => <ContentSkeleton/>
 })
-const SyntaxHighlighter = dynamicImport(() => import('react-syntax-highlighter/dist/cjs/prism'))
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter/dist/cjs/prism'))
 
 const Blog = () => {
     return (
